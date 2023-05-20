@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>查询</title>
+  <style>
+    #progress-con {
+      height: calc(100vh - 330px);
+      overflow-y: auto;
+      font-size: 14px;
+      color: #666;
+      box-sizing: border-box;
+      padding: 5px;
+      border-radius: 5px;
+      border: 1px solid #e1e1e1;
+      overflow: auto;
+    }
+
+    #progress-con::-webkit-scrollbar {
+      width: 0px;
+      height: 0;
+    }
+    #progress-con::-ms-thumb {
+      border-radius: 10px;
+      background: #c7c7c7;
+    }
+    #progress-con::-ms-track {
+      border-radius: 0;
+      background: #e6e6e6;
+    }
+    #progress-con::-webkit-scrollbar-thumb {
+      border-radius: 10px;
+      background: #c7c7c7;
+    }
+    #progress-con::-webkit-scrollbar-track {
+      border-radius: 0;
+      background: #e6e6e6;
+    }
+
+    #textPrice {
+      max-height: 75px;
+      margin-bottom: 5px;
+      padding: 5px;
+      font-size: 14px;
+      color: #666;
+      border-radius: 5px;
+      box-sizing: border-box;
+      border: 1px solid #e1e1e1;
+      overflow: auto;
+    }
+    #textPrice p {
+      color: #333;
+      padding: 0;
+      margin: 0;
+      margin-bottom: 5px;
+    }
+    #textPrice p var {
+      font-weight: bold;
+      color: #228b22;
+      text-decoration: none;
+      font-style: normal !important;
+    }
+    #textPrice p var.red {
+      color: #f50;
+      text-decoration: none;
+    }
+    #textPrice p var.blue {
+      color: #4f6ef2;
+      text-decoration: none;
+    }
+    #textPrice div {
+      color: #666;
+      font-size: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      overflow: hidden;
+    }
+    #textPrice div span {
+      flex: 1;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    #textPrice div var {
+      flex: 0 0 auto;
+      margin-left: 15px;
+      font-style: normal !important;
+    }
+    button {
+      margin-bottom: 10px;
+    }
+    #txt {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    #txt span {
+      font-size: 12px;
+      color: #999;
+    }
+    #txt #btnDownload {
+      font-size: 14px;
+      color: #999;
+    }
+    #modal-over {
+      position: fixed;
+      z-index: 999;
+      background-color: rgba(0, 0, 0, .6);
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      display: none;
+    }
+    #modal-over #modal-over-box {
+      position: absolute;
+      width: 40vw;
+      min-width: 280px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    #modal-over #modal-over-box p {
+      margin: 12px;
+      color: #4f6ef2;
+    }
+    #modal-over #modal-over-box #modal-over-box-content {
+      max-height: 30vh;
+      overflow-y: auto;
+      margin: 12px;
+      background: #f8f8f8;
+      border-radius: 8px;
+      box-sizing: border-box;
+      padding: 10px;
+    }
+    #modal-over #modal-over-box #modal-over-box-content > div {
+      display: flex;
+      align-items: center;
+      margin-bottom: 5px;
+      justify-content: space-between;
+    }
+    #modal-over #modal-over-box #modal-over-box-content > div var {
+      flex: 0 0 auto;
+      font-size: 14px;
+      margin-left: 10px;
+      font-style: normal !important;
+      color: #aaa;
+    }
+    #modal-over #modal-over-box #modal-over-box-content > div span {
+      flex: 1;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      color: #555;
+      font-size: 14px;
+    }
+    #modal-over #modal-over-box .btns {
+      display: flex;
+      border-top: 1px solid #ddd;
+    }
+    #modal-over #modal-over-box .btns button {
+      flex: 1;
+      line-height: 40px;
+      text-align: center;
+      font-size: 17px;
+      color: #4f6ef2;
+      margin: 0;
+      border: none;
+      background: #fff;
+      font-weight: bold;
+    }
+    #modal-over #modal-over-box .btns button:nth-of-type(1) {
+      color: #666;
+      border-right: 1px solid #ddd;
+      font-weight: 500;
+    }
+  </style>
+</head>
+
+<body>
+  <div style="margin-bottom: 10px;display: flex; align-items: center;">
+    <label style="flex: 0 0 auto;">用户昵称/歌单ID：</label><input style="width: 0;flex:1" type="text" placeholder="请完整输入" id="inputId">
+  </div>
+  <button id="btnUpload">上传txt文件</button>
+  <button id="btnPriceName">查询价格(按txt文件)</button>
+  <button id="btnPriceRecord">查询价格(按听歌排行)</button>
+  <button id="btnPricePlaylist">查询价格(按歌单id)</button>
+  <button id="btnReset">重置</button>
+  <button id="btnLogin">登录</button>
+  <button id="btnLogout">退出登录</button>
+  <div id="textPrice">请先点击上方按钮查询价格</div>
+  <div id="txt" style="text-align: right; margin-bottom: 10px;">
+    <span>收费标准：0.01元/3000条</span>
+    <a id="btnDownload" href="javascript: void(0);">下载txt文件</a>
+  </div>
+  验证码：<input type="text" placeholder="支付后获取" id="inputCode">
+  &nbsp;
+  <button id="btnQuery">查询</button>
+  &nbsp;
+  <div id="progress-con">
+    <div id="progress">
+      无数据
+    </div>
+  </div>
+  <div id="modal-over">
+    <div id="modal-over-box">
+      <p>以下歌曲的评论数过多，建议优化(只查前20万条)，优化后查询时间及费用将降低</p>
+      <div id="modal-over-box-content"></div>
+      <div class="btns">
+        <button id="btnOverNo">不优化</button>
+        <button id="btnOverOk">优化</button>
+      </div>
+    </div>
+  </div>
+  <input id="inputUpload" style="display: none;" type="file"/>
+  <script src="https://cdn.jsdelivr.net/npm/axios@0.26.1/dist/axios.min.js"></script>
+  <script>
+    const btnPriceName = document.getElementById('btnPriceName');
+    const btnPricePlaylist = document.getElementById('btnPricePlaylist');
+    const btnPriceRecord = document.getElementById('btnPriceRecord');
+    const btnReset = document.getElementById('btnReset');
+    const textPrice = document.getElementById('textPrice');
+    const btnQuery = document.getElementById('btnQuery');
+    const btnDownload = document.getElementById('btnDownload');
+    const btnLogin = document.getElementById('btnLogin');
+    const btnLogout = document.getElementById('btnLogout');
+    const btnUpload = document.getElementById('btnUpload');
+    const progress = document.getElementById('progress');
+    const progressCon = document.getElementById('progress-con');
+    const inputCode = document.getElementById('inputCode');
+    const inputId = document.getElementById('inputId');
+    const inputUpload = document.getElementById('inputUpload');
+    const btnOverNo = document.getElementById('btnOverNo');
+    const btnOverOk = document.getElementById('btnOverOk');
+    let loading = false;
+    let loadingUpload = false;
+    let loadingQuery = false;
+
+    function query(text, userId) {
+      const cookie = localStorage.getItem('cookie') || '';
+      axios(`/searchcomment?cookie=${cookie}&code=${text}&userId=${userId}&d=${Date.now()}`).then(res => {
+        progress.innerText = `${res.data}`;
+        if (res.data.indexOf('【FAIL】') > -1) {
+          loadingQuery = false;
+          alert('查询失败');
+          return;
+        }
+        if (res.data.indexOf('【END】本次查询结束') < 0) {
+          const t = setTimeout(() => {
+            clearTimeout(t);
+            query(text, userId)
+          }, 2500);
+        } else {
+          loadingQuery = false;
+          alert('查询结束，请打开public/result.html查看')
+        }
+        const t = setTimeout(() => {
+          clearTimeout(t);
+          const scrollTop = progress.clientHeight - progressCon.clientHeight < 0 ? 0 : progress.clientHeight - progressCon.clientHeight;
+          progressCon.scrollTop = scrollTop;
+        }, 100);
+      }).catch((err) => {
+        console.log(err)
+        progress.innerText = progress.innerText + '请求查询出错';
+        loadingQuery = false;
+        const t = setTimeout(() => {
+          clearTimeout(t);
+          const scrollTop = progress.clientHeight - progressCon.clientHeight < 0 ? 0 : progress.clientHeight - progressCon.clientHeight;
+          progressCon.scrollTop = scrollTop;
+        }, 100);
+      })
+    }
+
+    function overTip(song) {
+      if (song.length) {
+        const modal = document.getElementById('modal-over');
+        const modalBoxContent = document.getElementById('modal-over-box-content');
+        let detail = '';
+        song.forEach(item => {
+          detail += `<div><span>【${item.id}】${item.name}</span><var>${item.commentTotal}条</var></div>`;
+        });
+        modalBoxContent.innerHTML = detail;
+        modal.style.display = 'block';
+      }
+    }
+
+    (function () {
+
+      btnUpload.addEventListener('click', () => {
+        if (loadingQuery) {
+          alert('查询完毕后才可操作')
+          return;
+        }
+        inputUpload.click();
+      })
+
+
+      inputUpload.addEventListener('change', (event) => {
+        if (!event.target.files[0] || loadingUpload) { return; }
+        this.loadingUpload = true;
+        let param = new FormData();
+        param.append('file', event.target.files[0]) // 通过append向form对象添加数据 
+        axios({
+          method: 'post',
+          url: `/songsUpload?d=${Date.now()}`,
+          data: param,
+          headers: {
+            'Content-type' : 'multipart/form-data'
+          }
+        }).then(res => {
+          this.loadingUpload = false;
+          inputUpload.value = '';
+          alert('上传成功');
+        }).catch(err => {
+          this.loadingUpload = false;
+          inputUpload.value = '';
+          alert('上传失败');
+        })
+      })
+
+      btnPriceName.addEventListener('click', () => {
+        if (loadingQuery) {
+          alert('查询完毕后才可操作')
+          return;
+        }
+        if (!inputId.value) {
+          alert('请完整输入用户昵称')
+          return;
+        }
+        if (loading) { return; }
+        loading = true;
+        textPrice.innerText = '查询中...';
+        const cookie = localStorage.getItem('cookie') || '';
+        const over = sessionStorage.getItem('over') === 'true'
+        axios(`/searchbynamecomment?over=${over}&cookie=${cookie}&username=${inputId.value.trim()}&d=${Date.now()}`).then(res => {
+          loading = false;
+          if (res.data.userId) {
+            sessionStorage.setItem('userId', res.data.userId);
+          }
+          let detail = '';
+          res.data._songs.forEach(item => {
+            detail += `<div><span>【${item.id}】${item.name}</span><var>${item.commentTotal}条</var></div>`;
+          });
+          textPrice.innerHTML = `<p>查询成功：共<var>${res.data.commentTotal}</var>条评论，需支付<var class="red">${res.data.money}</var>元，预计需要用时<var class="blue">${res.data.time}</var>完成，详细如下：</p>` + detail;
+          overTip(res.data.songsOver);
+        }).catch((err) => {
+          loading = false;
+          textPrice.innerText = '查询出错' + JSON.stringify(err.response.data);
+        })
+      })
+
+      btnPriceRecord.addEventListener('click', () => {
+        if (loadingQuery) {
+          alert('查询完毕后才可操作')
+          return;
+        }
+        if (!inputId.value) {
+          alert('请完整输入用户昵称')
+          return;
+        }
+        if (loading) { return; }
+        loading = true;
+        textPrice.innerText = '查询中...';
+        const cookie = localStorage.getItem('cookie') || '';
+        axios(`/searchbyrecordcomment?cookie=${cookie}&username=${inputId.value.trim()}&d=${Date.now()}`).then(res => {
+          loading = false;
+          if (res.data.userId) {
+            sessionStorage.setItem('userId', res.data.userId);
+          }
+          let detail = '';
+          res.data._songs.forEach(item => {
+            detail += `<div><span>【${item.id}】${item.name}</span><var>${item.commentTotal}条</var></div>`;
+          });
+          textPrice.innerHTML = `<p>查询成功：共<var>${res.data.commentTotal}</var>条，需支付<var class="red">${res.data.money}</var>元，预计需要用时<var class="blue">${res.data.time}</var>完成，详细如下：</p>` + detail;
+          overTip(res.data.songsOver);
+        }).catch((err) => {
+          loading = false;
+          textPrice.innerText = '查询出错' + JSON.stringify(err.response.data);
+        })
+      })
+
+      btnPricePlaylist.addEventListener('click', () => {
+        if (loadingQuery) {
+          alert('查询完毕后才可操作')
+          return;
+        }
+        if (!inputId.value) {
+          alert('请输入歌单id')
+          return;
+        }
+        if (loading) { return; }
+        loading = true;
+        textPrice.innerText = '查询中...';
+        const cookie = localStorage.getItem('cookie') || '';
+        axios(`/searchbyplaylistcomment?cookie=${cookie}&playlistId=${inputId.value}&d=${Date.now()}`).then(res => {
+          loading = false;
+          if (res.data.userId) {
+            sessionStorage.setItem('userId', res.data.userId);
+          }
+          let detail = '';
+          res.data._songs.forEach(item => {
+            detail += `<div><span>【${item.id}】${item.name}</span><var>${item.commentTotal}条</var></div>`;
+          });
+          textPrice.innerHTML = `<p>查询成功：共<var>${res.data.commentTotal}</var>条评论，需支付<var class="red">${res.data.money}</var>元，预计需要用时<var class="blue">${res.data.time}</var>完成，详细如下：</p>` + detail;
+          overTip(res.data.songsOver);
+        }).catch((err) => {
+          loading = false;
+          textPrice.innerText = '查询出错' + JSON.stringify(err.response.data);
+        })
+      })
+
+      btnReset.addEventListener('click', () => {
+        if (loadingQuery) {
+          alert('查询完毕后才可操作')
+          return;
+        }
+        axios(`/clear?d=${Date.now()}`).then(res => {
+          loading = false;
+          alert('已清空，请重新查询')
+        }).catch(() => {
+          alert('操作失败')
+        })
+      })
+
+      btnQuery.addEventListener('click', () => {
+        if (loadingQuery) { return; }
+        const textId = inputId.value;
+        const userId = sessionStorage.getItem('userId');
+        if (!userId) {
+          alert('数据丢失，请完整输入用户昵称或歌单id，重新查询价格');
+          return;
+        }
+        const text = inputCode.value;
+        if (!text) {
+          alert('请输入验证码');
+          return;
+        }
+        loadingQuery = true;
+        query(text, userId)
+      })
+
+      btnDownload.addEventListener('click', () => {
+        const elink = document.createElement('a')
+        elink.href = `${location.href}song.txt?d=${Date.now()}`
+        elink.setAttribute('download', 'song.txt')
+        elink.style.display = 'none'
+        document.body.appendChild(elink)
+        elink.click()
+        document.body.removeChild(elink)
+      })
+      btnLogin.addEventListener('click', () => {
+        window.open(`${location.href}qrlogin.html`);
+      })
+      btnLogout.addEventListener('click', () => {
+        alert('已退出登录');
+        localStorage.clear();
+      })
+      btnOverNo.addEventListener('click', () => {
+        const modal = document.getElementById('modal-over');
+        modal.style.display = 'none';
+      })
+      btnOverOk.addEventListener('click', () => {
+        sessionStorage.setItem('over', 'true');
+        const modal = document.getElementById('modal-over');
+        modal.style.display = 'none';
+
+        if (loadingQuery) {
+          alert('查询完毕后才可操作')
+          return;
+        }
+        if (loading) { return; }
+        loading = true;
+        textPrice.innerText = '查询中...';
+        const cookie = localStorage.getItem('cookie') || '';
+        const over = sessionStorage.getItem('over') === 'true'
+        axios(`/searchbynamecomment?over=${over}&cookie=${cookie}&d=${Date.now()}`).then(res => {
+          loading = false;
+          if (res.data.userId) {
+            sessionStorage.setItem('userId', res.data.userId);
+          }
+          let detail = '';
+          res.data._songs.forEach(item => {
+            detail += `<div><span>【${item.id}】${item.name}</span><var>${item.commentTotal}条</var></div>`;
+          });
+          textPrice.innerHTML = `<p>查询成功：共<var>${res.data.commentTotal}</var>条评论，需支付<var class="red">${res.data.money}</var>元，预计需要用时<var class="blue">${res.data.time}</var>完成，详细如下：</p>` + detail;
+          overTip(res.data.songsOver);
+        }).catch((err) => {
+          loading = false;
+          textPrice.innerText = '查询出错' + JSON.stringify(err.response.data);
+        })
+      })
+    }());
+
+  </script>
+</body>
+
+</html>
