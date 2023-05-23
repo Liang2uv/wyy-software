@@ -185,7 +185,7 @@
 
 <body>
   <div style="margin-bottom: 10px;display: flex; align-items: center;">
-    <label style="flex: 0 0 auto;">用户昵称/歌单ID：</label><input style="width: 0;flex:1" type="text" placeholder="请完整输入" id="inputId">
+    <label style="flex: 0 0 auto;">用户昵称/歌单ID：</label><input style="width: 0;flex:1" type="text" placeholder="用户昵称或歌单ID" id="inputId">
   </div>
   <button id="btnUpload">上传txt文件</button>
   <button id="btnPriceName">查询价格(按txt文件)</button>
@@ -266,8 +266,13 @@
           progressCon.scrollTop = scrollTop;
         }, 100);
       }).catch((err) => {
-        console.log(err)
-        progress.innerText = progress.innerText + '请求查询出错';
+        let err2 = '请求查询出错';
+        try {
+          err2 = JSON.stringify(err)
+        } catch (error) {
+          err2 = '请求查询出错[未知原因]';
+        }
+        progress.innerText = progress.innerText + err2;
         loadingQuery = false;
         const t = setTimeout(() => {
           clearTimeout(t);
@@ -291,6 +296,9 @@
     }
 
     (function () {
+
+      btnLogin.style.display = localStorage.getItem('cookie') ?  'none' : 'inline-block';
+      btnLogout.style.display = !localStorage.getItem('cookie') ?  'none' : 'inline-block';
 
       btnUpload.addEventListener('click', () => {
         if (loadingQuery) {
@@ -455,11 +463,26 @@
         document.body.removeChild(elink)
       })
       btnLogin.addEventListener('click', () => {
+        let num = 0;
+        const t = setInterval(() => {
+          if (localStorage.getItem('cookie')) {
+            clearInterval(t);
+            btnLogin.style.display = 'none';
+            btnLogout.style.display = 'inline-block';
+			return;
+          }
+          num++;
+          if (num > 60) {
+            clearInterval(t);
+          }
+        }, 3000);
         window.open(`${location.href}qrlogin.html`);
       })
       btnLogout.addEventListener('click', () => {
         alert('已退出登录');
         localStorage.clear();
+        btnLogout.style.display = 'none';
+        btnLogin.style.display = 'inline-block';
       })
       btnOverNo.addEventListener('click', () => {
         const modal = document.getElementById('modal-over');
