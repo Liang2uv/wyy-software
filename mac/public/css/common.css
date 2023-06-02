@@ -1,0 +1,85 @@
+body {
+  margin: 0;
+  padding: 0;
+  background: #f5f5f5;
+  color: #333;
+  min-width: 1200px;
+  overflow-x: auto;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.h1,
+.h2,
+.h3,
+h1,
+h2,
+h3,
+ul,
+p {
+  margin: 0;
+  padding: 0;
+}
+
+i, em, var, dfn, ins, b, u {
+  font-style: normal;
+  text-decoration: none;
+}
+
+li {
+  list-style: none;
+}
+
+#app {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  background: #fff;
+  padding: 0 20px;
+  min-height: 100vh;
+}
+
+#app > main {
+  position: relative;
+  min-height: calc(100vh - 120px);
+}
+
+#app > main .login {
+  position: absolute;
+  bottom: 30px;
+  left: 15px;
+  color: #676869;
+  cursor: pointer;
+}
+
+#app > main .login:hover {
+  color: #0a58ca;
+}
+
+.sp-circle {
+  border: 4px rgba(0, 0, 0, 0.25) solid;
+  border-top: 4px black solid;
+  border-radius: 50%;
+  -webkit-animation: spCircRot 0.6s infinite linear;
+	animation: spCircRot 0.6s infinite linear;
+	display: inline-block;
+}
+
+.sp {
+	width: 16px;
+	height: 16px;
+	clear: both;
+}
+
+@keyframes spCircRot {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}

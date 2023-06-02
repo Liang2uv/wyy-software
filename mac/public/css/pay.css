@@ -1,0 +1,75 @@
+.pay {
+  padding: 30px 0;
+}
+
+.pay > h1 {
+  font-weight: bold;
+  font-size: 25px;
+  width: 750px;
+  margin: 0 auto;
+  margin-bottom: 20px;
+}
+
+.pay > h1 > var {
+  color: #f50;
+  font-size: 25px;
+}
+
+.pay > ul {
+  display: flex;
+  flex-wrap: wrap;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  width: 600px;
+  margin: 0 auto;
+  margin-bottom: 20px;
+}
+
+.pay > ul > li {
+  flex: 1;
+  padding: 20px;
+  box-sizing: border-box;
+  border-right: 1px solid #ddd;
+}
+
+.pay > ul > li:last-of-type {
+  border: none;
+}
+
+.pay > ul > li > h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.pay > ul > li > img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+.pay > form {
+  width: 750px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+.pay > form label {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  margin-right: 10px;
+  font-size: 25px;
+  font-weight: bold;
+  margin-bottom: 0;
+}
+
+.pay > form button {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  margin-left: 10px;
+}
+
+.pay > form input {
+  width: 0;
+  flex: 0 0 200px;
+}

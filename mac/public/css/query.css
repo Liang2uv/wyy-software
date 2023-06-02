@@ -1,0 +1,122 @@
+.query {
+  border: 1px solid #fff;
+  margin-top: 20px;
+}
+
+.query .query-grid {
+  display: flex;
+  flex-wrap: wrap;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+}
+
+.query .query-grid > div {
+  flex: 1;
+  min-width: 150px;
+  overflow: hidden;
+  text-align: center;
+  border-right: 1px solid #ddd;
+  padding: 10px 5px;
+}
+
+.query .query-grid > div:last-of-type {
+  border: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.query .query-grid > div label {
+  color: #666;
+  font-size: 14px;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.query .query-grid > div label i {
+  font-size: 14px;
+  color: #666;
+}
+
+.query .query-grid > div var {
+  font-size: 20px;
+  font-weight: bold;
+  color: #337ab7;
+  display: block;
+}
+
+.query .query-grid > div var small {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.query ul.query-songs {
+  margin-top: 15px;
+  overflow-y: auto;
+  background-color: #fafafa;
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 10px;
+  max-height: calc(100vh - 300px);
+}
+
+.query ul.query-songs > li {
+  margin-bottom: 15px;
+}
+
+.query ul.query-songs > li > p {
+  font-size: 14px;
+  color: #666;
+}
+
+.query ul.query-songs > li > ol {
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.query ul.query-songs > li > ol > li {
+  margin-bottom: 15px;
+}
+
+.query ul.query-songs > li > ol > li .msg {
+  display: flex;
+  justify-content: space-between;
+  overflow: hidden;
+  margin-bottom: 5px;
+}
+
+.query ul.query-songs > li > ol > li .msg span {
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 15px;
+}
+
+.query ul.query-songs > li > ol > li .msg var {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  margin-left: 15px;
+  font-size: 14px;
+  color: #999;
+}
+
+.query ul.query-songs > li > ol > li .song-progress {
+  height: 10px;
+  border-radius: 10px;
+}
+
+.query ul.query-songs > li > ol > li .error {
+  font-size: 14px;
+  color: #d33724;
+  margin-top: 5px;
+}
+
+.query .query-btns {
+  text-align: right;
+  margin-top: 15px;
+}

@@ -1,0 +1,154 @@
+.source {
+  padding: 20px 0 400px 0;
+}
+
+.source > h1 {
+  text-align: center;
+  font-weight: bold;
+  font-size: 30px;
+}
+
+.source > p {
+  text-align: center;
+  font-size: 20px;
+  color: #454545;
+  margin-top: 10px;
+  margin-bottom: 30px;
+}
+
+.source > ul {
+  display: flex;
+  justify-content: space-between;
+  margin: 30px 0;
+}
+
+.source > ul > li {
+  flex: 0 0 30%;
+  border-radius: 10px;
+  color: #fff;
+  position: relative;
+  padding: 15px;
+  cursor: pointer;
+}
+
+.source > ul > li:nth-child(1) {
+  background: rgb(158, 197, 254);
+  color: rgb(10, 88, 202);
+  box-shadow: 0 0 5px rgba(10, 88, 202, 0.5);
+}
+
+.source > ul > li:nth-child(2) {
+  background: rgb(241, 174, 181);
+  color: rgb(176, 42, 55);
+  box-shadow: 0 0 5px rgba(176, 42, 55, 0.5);
+}
+
+.source > ul > li:nth-child(3) {
+  background: rgb(163, 207, 187);
+  color: rgb(20, 108, 67);
+  box-shadow: 0 0 5px rgba(20, 108, 67, 0.5);
+}
+
+.source > ul > li > span {
+  font-size: 14px;
+  color: #fff;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1;
+  background: #ffc107;
+  line-height: 25px;
+  border-radius: 0 0 0 10px;
+  padding: 0 10px;
+}
+
+.source > ul > li > h3 {
+  font-size: 22px;
+  margin-bottom: 15px;
+}
+
+.source > ul > li > h3 > i {
+  font-size: 22px;
+}
+
+.source > ul > li > p {
+  font-size: 16px;
+}
+
+.source > ul > li > i {
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  font-size: 16px;
+}
+
+.source > ul > li > small {
+  font-size: 14px;
+  color: #454545;
+}
+
+.source > ul > li > .source-form {
+	background-color: rgb(158, 197, 254);
+	border-radius: 10px;
+	padding: 15px;
+	width: 500px;
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	transform: translateY(calc(100% + 20px));
+}
+
+.source > ul > li > .source-form::before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 50%;
+	transform: translateY(-100%);
+	border-bottom: 10px solid rgb(158, 197, 254);
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid transparent;
+}
+
+.source > ul > li > .source-form > .btns {
+	margin-top: 20px;
+	text-align: right;
+}
+
+.source > ul > li > .source-form.record {
+	background:  rgba(158, 197, 254, .5);
+	left: 0;
+}
+
+.source > ul > li > .source-form.record::before {
+	left: 30%;
+	border-bottom-color: rgba(158, 197, 254, .5);
+}
+
+.source > ul > li > .source-form.playlistTa {
+	background:  rgba(241, 174, 181, .5);
+	left: 50%;
+	transform: translate(-50%, calc(100% + 20px));
+}
+
+.source > ul > li > .source-form.playlistTa::before {
+	left: 50%;
+	transform: translate(-50%, -100%);
+	border-bottom-color: rgba(241, 174, 181, .5);
+}
+
+.source > ul > li > .source-form.playlistMy {
+	background:  rgba(163, 207, 187, .5);
+	left: auto;
+	right: 0;
+}
+
+.source > ul > li > .source-form.playlistMy::before {
+	left: 80%;
+	transform: translate(-50%, -100%);
+	border-bottom-color: rgba(163, 207, 187, .5);
+}
+
+

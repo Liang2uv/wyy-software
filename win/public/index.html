@@ -2,514 +2,740 @@
 <html lang="zh">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>查询</title>
-  <style>
-    #progress-con {
-      height: calc(100vh - 330px);
-      overflow-y: auto;
-      font-size: 14px;
-      color: #666;
-      box-sizing: border-box;
-      padding: 5px;
-      border-radius: 5px;
-      border: 1px solid #e1e1e1;
-      overflow: auto;
-    }
-
-    #progress-con::-webkit-scrollbar {
-      width: 0px;
-      height: 0;
-    }
-    #progress-con::-ms-thumb {
-      border-radius: 10px;
-      background: #c7c7c7;
-    }
-    #progress-con::-ms-track {
-      border-radius: 0;
-      background: #e6e6e6;
-    }
-    #progress-con::-webkit-scrollbar-thumb {
-      border-radius: 10px;
-      background: #c7c7c7;
-    }
-    #progress-con::-webkit-scrollbar-track {
-      border-radius: 0;
-      background: #e6e6e6;
-    }
-
-    #textPrice {
-      max-height: 75px;
-      margin-bottom: 5px;
-      padding: 5px;
-      font-size: 14px;
-      color: #666;
-      border-radius: 5px;
-      box-sizing: border-box;
-      border: 1px solid #e1e1e1;
-      overflow: auto;
-    }
-    #textPrice p {
-      color: #333;
-      padding: 0;
-      margin: 0;
-      margin-bottom: 5px;
-    }
-    #textPrice p var {
-      font-weight: bold;
-      color: #228b22;
-      text-decoration: none;
-      font-style: normal !important;
-    }
-    #textPrice p var.red {
-      color: #f50;
-      text-decoration: none;
-    }
-    #textPrice p var.blue {
-      color: #4f6ef2;
-      text-decoration: none;
-    }
-    #textPrice div {
-      color: #666;
-      font-size: 14px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      overflow: hidden;
-    }
-    #textPrice div span {
-      flex: 1;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      overflow: hidden;
-    }
-    #textPrice div var {
-      flex: 0 0 auto;
-      margin-left: 15px;
-      font-style: normal !important;
-    }
-    button {
-      margin-bottom: 10px;
-    }
-    #txt {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 10px;
-    }
-    #txt span {
-      font-size: 12px;
-      color: #999;
-    }
-    #txt #btnDownload {
-      font-size: 14px;
-      color: #999;
-    }
-    #modal-over {
-      position: fixed;
-      z-index: 999;
-      background-color: rgba(0, 0, 0, .6);
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      display: none;
-    }
-    #modal-over #modal-over-box {
-      position: absolute;
-      width: 40vw;
-      min-width: 280px;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: #fff;
-      border-radius: 10px;
-      overflow: hidden;
-    }
-    #modal-over #modal-over-box p {
-      margin: 12px;
-      color: #4f6ef2;
-    }
-    #modal-over #modal-over-box #modal-over-box-content {
-      max-height: 30vh;
-      overflow-y: auto;
-      margin: 12px;
-      background: #f8f8f8;
-      border-radius: 8px;
-      box-sizing: border-box;
-      padding: 10px;
-    }
-    #modal-over #modal-over-box #modal-over-box-content > div {
-      display: flex;
-      align-items: center;
-      margin-bottom: 5px;
-      justify-content: space-between;
-    }
-    #modal-over #modal-over-box #modal-over-box-content > div var {
-      flex: 0 0 auto;
-      font-size: 14px;
-      margin-left: 10px;
-      font-style: normal !important;
-      color: #aaa;
-    }
-    #modal-over #modal-over-box #modal-over-box-content > div span {
-      flex: 1;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      overflow: hidden;
-      color: #555;
-      font-size: 14px;
-    }
-    #modal-over #modal-over-box .btns {
-      display: flex;
-      border-top: 1px solid #ddd;
-    }
-    #modal-over #modal-over-box .btns button {
-      flex: 1;
-      line-height: 40px;
-      text-align: center;
-      font-size: 17px;
-      color: #4f6ef2;
-      margin: 0;
-      border: none;
-      background: #fff;
-      font-weight: bold;
-    }
-    #modal-over #modal-over-box .btns button:nth-of-type(1) {
-      color: #666;
-      border-right: 1px solid #ddd;
-      font-weight: 500;
-    }
-  </style>
+  <link rel="icon" class="js-site-favicon" type="image/svg+xml" href="https://github.githubassets.com/favicons/favicon.svg">
+	<!-- 新 Bootstrap 核心 CSS 文件 -->
+	<link rel="stylesheet" href="./css/bootstrap.min.css">
+	<link rel="stylesheet" href="./css/common.css">
+	<link rel="stylesheet" href="./css/header.css">
+	<link rel="stylesheet" href="./css/srouce.css">
+	<link rel="stylesheet" href="./css/query.css">
+	<link rel="stylesheet" href="./css/pay.css">
+	<link rel="stylesheet" href="./css/result.css">
+	<link rel="stylesheet" href="./css/iconfont.css">
+	<script src="./js/axios.min.js"></script>
+	<script src="./js/vue.js"></script>
 </head>
 
 <body>
-  <div style="margin-bottom: 10px;display: flex; align-items: center;">
-    <label style="flex: 0 0 auto;">用户昵称/歌单ID：</label><input style="width: 0;flex:1" type="text" placeholder="用户昵称或歌单ID" id="inputId">
-  </div>
-  <button id="btnUpload">上传txt文件</button>
-  <button id="btnPriceName">查询价格(按txt文件)</button>
-  <button id="btnPriceRecord">查询价格(按听歌排行)</button>
-  <button id="btnPricePlaylist">查询价格(按歌单id)</button>
-  <button id="btnReset">重置</button>
-  <button id="btnLogin">登录</button>
-  <button id="btnLogout">退出登录</button>
-  <div id="textPrice">请先点击上方按钮查询价格</div>
-  <div id="txt" style="text-align: right; margin-bottom: 10px;">
-    <span>收费标准：0.01元/3000条</span>
-  </div>
-  验证码：<input type="text" placeholder="支付后获取" id="inputCode">
-  &nbsp;
-  <button id="btnQuery">查询</button>
-  &nbsp;
-  <div id="progress-con">
-    <div id="progress">
-      无数据
-    </div>
-  </div>
-  <div id="modal-over">
-    <div id="modal-over-box">
-      <p>以下歌曲的评论数过多，建议优化(只查前20万条)，优化后查询时间及费用将降低</p>
-      <div id="modal-over-box-content"></div>
-      <div class="btns">
-        <button id="btnOverNo">不优化</button>
-        <button id="btnOverOk">优化</button>
-      </div>
-    </div>
-  </div>
-  <input id="inputUpload" style="display: none;" type="file"/>
-  <script src="https://cdn.jsdelivr.net/npm/axios@0.26.1/dist/axios.min.js"></script>
-  <script>
-    const btnPriceName = document.getElementById('btnPriceName');
-    const btnPricePlaylist = document.getElementById('btnPricePlaylist');
-    const btnPriceRecord = document.getElementById('btnPriceRecord');
-    const btnReset = document.getElementById('btnReset');
-    const textPrice = document.getElementById('textPrice');
-    const btnQuery = document.getElementById('btnQuery');
-    const btnLogin = document.getElementById('btnLogin');
-    const btnLogout = document.getElementById('btnLogout');
-    const btnUpload = document.getElementById('btnUpload');
-    const progress = document.getElementById('progress');
-    const progressCon = document.getElementById('progress-con');
-    const inputCode = document.getElementById('inputCode');
-    const inputId = document.getElementById('inputId');
-    const inputUpload = document.getElementById('inputUpload');
-    const btnOverNo = document.getElementById('btnOverNo');
-    const btnOverOk = document.getElementById('btnOverOk');
-    let loading = false;
-    let loadingUpload = false;
-    let loadingQuery = false;
 
-    function query(text, userId) {
-      const cookie = localStorage.getItem('cookie') || '';
-      axios(`/searchcomment?cookie=${cookie}&code=${text}&userId=${userId}&d=${Date.now()}`).then(res => {
-        progress.innerText = `${res.data}`;
-        if (res.data.indexOf('【FAIL】') > -1) {
-          loadingQuery = false;
-          alert('查询失败');
-          return;
-        }
-        if (res.data.indexOf('【END】本次查询结束') < 0) {
-          const t = setTimeout(() => {
-            clearTimeout(t);
-            query(text, userId)
-          }, 2500);
-        } else {
-          loadingQuery = false;
-          alert('查询结束，请打开public/result.html查看')
-        }
-        const t = setTimeout(() => {
-          clearTimeout(t);
-          const scrollTop = progress.clientHeight - progressCon.clientHeight < 0 ? 0 : progress.clientHeight - progressCon.clientHeight;
-          progressCon.scrollTop = scrollTop;
-        }, 100);
-      }).catch((err) => {
-        let err2 = '请求查询出错';
-        try {
-          err2 = JSON.stringify(err)
-        } catch (error) {
-          err2 = '请求查询出错[未知原因]';
-        }
-        progress.innerText = progress.innerText + err2;
-        loadingQuery = false;
-        const t = setTimeout(() => {
-          clearTimeout(t);
-          const scrollTop = progress.clientHeight - progressCon.clientHeight < 0 ? 0 : progress.clientHeight - progressCon.clientHeight;
-          progressCon.scrollTop = scrollTop;
-        }, 100);
-      })
-    }
+	<div id="app">
+		<header>
+			<nav v-bind:class="{active: step >= 0 }">1.选择数据源</nav>
+			<nav v-bind:class="{active: step >= 1 }">2.开始查询</nav>
+			<nav v-bind:class="{active: step >= 2 }" @click="payIntro" data-bs-toggle="modal" data-bs-target="#alertModal">3.支付查询费</nav>
+			<nav v-bind:class="{active: step >= 3 }">4.查看结果</nav>
+		</header>
+		<main>
+			<!-- 选择数据源 -->
+			<div class="source" v-if="step === 0">
+				<h1>请选择要查找的数据源</h1>
+				<p>推荐从听歌排行找TA写过的评论，查出率达80%</p>
+				<ul>
+					<li v-on:click="sourceSelect('record')">
+						<span>推荐</span>
+						<h3><i class="iconfont icon-paixingbang"></i> 听歌排行</h3>
+						<p>从听歌排行前100首里找TA的评论</p>
+						<small>需TA开放查看权限</small>
+						<i class="iconfont icon-arrow_down_fat"></i>
+						<form class="source-form record" v-if="source === 'record'" @click.stop="stoPpropagation">
+							<div class="mb-2">
+								<label for="text" class="form-label">TA的昵称:</label>
+								<input type="text" class="form-control" placeholder="请完整输入TA的网易云昵称" v-model="sourceForm.nickname">
+							</div>
+							<div>
+								<label for="text" class="form-label">查询范围:</label>
+								<select class="form-select" v-model="sourceForm.range">
+									<option v-for="item in sourceRangeList" :value="item.value">{{ item.label }}</option>
+								</select>
+							</div>
+							<div class="btns">
+								<button type="button" class="btn btn-primary" @click="sourceNext()">下一步</button>
+							</div>
+						</form>
+					</li>
+					<li v-on:click="sourceSelect('playlistTa')">
+						<h3><i class="iconfont icon-xihuan"></i> TA的歌单</h3>
+						<p>从TA的歌单里找TA写过的评论</p>
+						<small>TA创建的歌单、你收藏的TA的歌单</small>
+						<i class="iconfont icon-arrow_down_fat"></i>
+						<form class="source-form playlistTa" v-if="source === 'playlistTa'" @click.stop="stoPpropagation">
+							<div class="mb-2">
+								<label for="text" class="form-label">歌单链接:</label>
+								<input type="text" class="form-control" placeholder="网易云APP→进入歌单→分享→复制链接" v-model="sourceForm.url">
+							</div>
+							<div>
+								<label for="text" class="form-label">查询范围:</label>
+								<select class="form-select" v-model="sourceForm.range">	
+									<option v-for="item in sourceRangeList" :value="item.value">{{ item.label }}</option>
+								</select>
+							</div>
+							<div class="btns">
+								<button type="button" class="btn btn-primary" @click="sourceNext()">下一步</button>
+							</div>
+						</form>
+					</li>
+					<li v-on:click="sourceSelect('playlistMy')">
+						<h3><i class="iconfont icon-wodexuanzhong"></i> 别人的歌单</h3>
+						<p>从别人的歌单里找TA写过的评论</p>
+						<small>别人创建的歌单、你们的共享歌单</small>
+						<i class="iconfont icon-arrow_down_fat"></i>
+						<form class="source-form playlistMy" v-if="source === 'playlistMy'" @click.stop="stoPpropagation">
+							<div class="mb-2">
+								<label for="text" class="form-label">TA的昵称:</label>
+								<input type="text" class="form-control" placeholder="请完整输入TA的网易云昵称" v-model="sourceForm.nickname">
+							</div>
+							<div class="mb-2">
+								<label for="text" class="form-label">歌单链接:</label>
+								<input type="text" class="form-control" placeholder="网易云APP→进入歌单→分享→复制链接" v-model="sourceForm.url">
+							</div>
+							<div>
+								<label for="text" class="form-label">查询范围:</label>
+								<select class="form-select" v-model="sourceForm.range">
+									<option v-for="item in sourceRangeList" :value="item.value">{{ item.label }}</option>
+								</select>
+							</div>
+							<div class="btns">
+								<button type="button" class="btn btn-primary" @click="sourceNext()">下一步</button>
+							</div>
+						</form>
+					</li>
+				</ul>
+			</div>
+			<!-- 开始查询 -->
+			<div class="query" v-if="step === 1">
+				<div class="alert alert-warning" v-if="queryLoading">
+					<span class="sp sp-circle"></span>
+					{{ queryTip }}
+				</div>
+				<div class="alert alert-danger" v-if="queryError">
+					查询出错：{{ queryErrorTip }}
+				</div>
+				<div class="alert alert-warning" v-if="queryData.status === 1">
+					{{ pausing ? '已暂停，可关闭本页面下次继续查' : '查询中...请勿关闭浏览器和app.exe黑窗口，windows用户请延长睡眠断网时间' }}
+				</div>
+				<div class="alert alert-warning" v-if="queryData.status === -1">
+					如出现“网络太拥挤,请稍候再试!”，请点击“{{ isLogin ? '退出登录' : '登录' }}”，再点击“重查出错歌曲”
+				</div>
+				<div class="query-grid" v-if="queryData">
+					<div>
+						<label>歌曲总数</label>
+						<var>{{ queryData.songsTotal }} <small>首</small> </var>
+					</div>
+					<div v-if="queryData.range <= 1">
+						<label>需查找评论数</label>
+						<var>{{ queryData.commentTotal || '--' }} <small>条</small> </var>
+					</div>
+					<div v-if="queryData.range > 1">
+						<label>已查找评论数</label>
+						<var>{{ queryData.commentSearch || '--' }} <small>条</small> </var>
+					</div>
+					<div>
+						<label>预计查询时间</label>
+						<var>{{ queryData.time || '--' }}</var>
+					</div>
+					<div>
+						<label style="cursor: pointer;" @click="payIntro" data-bs-toggle="modal" data-bs-target="#alertModal">预计查询费用 <i class="iconfont icon-wenhao-xianxingyuankuang"></i></label>
+						<var>{{ queryData.money || '--' }} <small>元</small> </var>
+					</div>
+					<div>
+						<label>已找到TA评论</label>
+						<var style="color: #b02a37;">{{ queryData.commentTaTotal }} <small>条</small></var>
+					</div>
+				</div>
+				<ul class="query-songs" v-if="queryData && queryData.songs.length">
+					<li v-for="(threads, it) in queryData.songs">
+						<p>线程{{ it + 1 }}</p>
+						<ol>
+							<li v-for="song in threads">
+								<div class="msg">
+									<span>{{ song.name }}</span>
+									<var class="progress-number">{{ song.progress }}%</var>
+								</div>
+								<div class="song-progress"
+									:style="'background: linear-gradient(to right, #a3cfbb ' + song.progress + '%, #e9e9e9 ' + song.progress + '%)'">
+								</div>
+								<div class="error" v-if="song.status === -1">查询出错：{{ song.error }}</div>
+							</li>
+						</ol>
+					</li>
+				</ul>
+				<div class="query-btns" v-if="queryData && queryData.status === 1">
+					<button type="button" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="返回将清空数据!" @click="queryReset" v-if="pausing">重置并返回</button>
+					<button type="button" class="btn btn-primary" @click="queryPause" v-if="!pausing">暂停</button>
+					<button type="button" class="btn btn-primary" @click="queryRestart" v-if="pausing">继续</button>
+					<button type="button" class="btn btn-success" v-if="pausing && queryData.commentTaTotal" data-bs-toggle="modal" data-bs-target="#resultModal">查看结果</button>
+				</div>
+				<div class="query-btns" v-if="queryData && queryData.status === -1">
+					<button type="button" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="返回将清空数据!" @click="queryReset">重置并返回</button>
+					<button type="button" class="btn btn-primary" @click="queryComment(true)">重查出错歌曲</button>
+					<button type="button" class="btn btn-success" v-if="queryData.commentTaTotal" data-bs-toggle="modal" data-bs-target="#resultModal">查看结果</button>
+				</div>
+				<div class="query-btns" v-if="queryData && queryData.status === 2">
+					<button type="button" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="返回将清空数据!" @click="queryReset">返回</button>
+				</div>
+			</div>
+			<!-- 支付查询费 -->
+			<div class="pay" v-if="step === 2">
+				<div class="alert alert-warning" v-if="payLoading">
+					<span class="sp sp-circle"></span>
+					{{ payTip }}
+				</div>
+				<div class="alert alert-danger" v-if="payError">
+					查询出错：{{ payErrorTip }}
+				</div>
+				<h1>1. 共找到 <var>{{ queryData.commentTaTotal }}</var> 条评论，请支付 <var>¥{{ queryData.money }}</var> 查看结果</h1>
+				<ul>
+					<li>
+						<h3>方式一：加我微信支付</h3>
+						<img src="./image/wechat.jpg" alt="">
+					</li>
+					<li>
+						<h3>方式二：自助付款(多退少补)</h3>
+						<img src="./image/pay.jpg" alt="">
+					</li>
+				</ul>
+				<form>
+					<label for="text" class="form-label">2. 验证码</label>
+					<input type="text" class="form-control" placeholder="支付后获取" v-model="payCode">
+					<button type="button" class="btn btn-primary" @click="payNext()">确定</button>
+				</form>
+			</div>
+			<!-- 查看结果 -->
+			<div class="result" v-if="step === 3">
+				<div class="alert alert-warning" v-if="queryLoading">
+					<span class="sp sp-circle"></span>
+					{{ queryTip }}
+				</div>
+				<div class="alert alert-danger" v-if="queryError">
+					查询出错：{{ queryErrorTip }}
+				</div>
+				<ul>
+					<li v-for="song in result">
+						<h3>{{ song.name }} <small>歌手：{{ song.author }}&nbsp;&nbsp;&nbsp;&nbsp;歌曲id: {{ song.id }}</small></h3>
+						<ol>
+							<li v-for="pc in song.result">
+								<img :src="pc.user.avatarUrl" alt="">
+								<div class="msg">
+									<div class="content">
+										<a :title="pc.user.userId" target="_blank" :href="'https://music.163.com/#/user/home?id=' + pc.user.userId">{{ pc.user.nickname }}：</a><span :title="pc.id">{{ pc.content || pc.richContent }}</span>
+									</div>
+									<div class="content-inner" v-if="pc.beReplied.length">
+										<div class="content" v-for="cc in pc.beReplied">
+											<a :title="cc.user.userId" target="_blank" :href="'https://music.163.com/#/user/home?id=' + cc.user.userId">{{ cc.user.nickname }}：</a><span :title="cc.id">{{ cc.content || cc.richContent }}</span>
+										</div>
+									</div>
+									<div class="time">
+										<var :title="pc.ipLocation.ip">{{ pc.timeStr || '2022-11-22 12:00:23' }}&nbsp;&nbsp;{{ pc.ipLocation.location }}</var>
+										<span>
+											<i class="iconfont icon--like-fill" v-if="pc.liked" @click="like"></i>
+											<i class="iconfont icon--like" v-if="!pc.liked" @click="like"></i>
+											<ins v-if="pc.likedCount">({{ pc.likedCount }})</ins>
+											<a @click="reply">回复</a>
+										</span>
+									</div>
+								</div>
+							</li>
+						</ol>
+					</li>
+				</ul>
+				<div class="result-btns">
+					<p>请截图保存，刷新后不可恢复！</p>
+					<button type="button" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="返回将清空数据!" @click="queryReset">重置并返回</button>
+				</div>
+			</div>
+			<!-- 登录退出登录 -->
+			<a class="login" v-show="!isLogin" @click="login">登录</a>
+			<a class="login" v-show="isLogin" @click="logout">退出登录</a>
+		</main>
 
-    function overTip(song) {
-      if (song.length) {
-        const modal = document.getElementById('modal-over');
-        const modalBoxContent = document.getElementById('modal-over-box-content');
-        let detail = '';
-        song.forEach(item => {
-          detail += `<div><span>【${item.id}】${item.name}</span><var>${item.commentTotal}条</var></div>`;
-        });
-        modalBoxContent.innerHTML = detail;
-        modal.style.display = 'block';
-      }
-    }
+		<!-- alert框 -->
+		<div class="modal" id="alertModal">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title">{{ alertModal.title }}</h4>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" @click="alertClose"></button>
+					</div>
+					<div class="modal-body">
+						<div v-html="alertModal.content"></div>
+					</div>
+					<div class="modal-footer">
+						<button id="btnAlertClose" type="button" class="btn btn-danger" data-bs-dismiss="modal" @click="alertClose">关闭</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<button id="btnAlert" type="button" class="btn btn-success" v-show="false" data-bs-toggle="modal" data-bs-target="#alertModal"></button>
 
-    (function () {
+		<!-- 提示查看结果 -->
+		<div class="modal" id="resultModal">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title">确定查看结果？</h4>
+						<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+					</div>
+					<div class="modal-body">
+						<div>当前进度将被清空，请谨慎操作！</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="step++">确认</button>
+					</div>
+				</div>
+			</div>
+		</div>
 
-      btnLogin.style.display = localStorage.getItem('cookie') ?  'none' : 'inline-block';
-      btnLogout.style.display = !localStorage.getItem('cookie') ?  'none' : 'inline-block';
 
-      btnUpload.addEventListener('click', () => {
-        if (loadingQuery) {
-          alert('查询完毕后才可操作')
-          return;
-        }
-        inputUpload.click();
-      })
+	</div>
 
+	<script>
 
-      inputUpload.addEventListener('change', (event) => {
-        if (!event.target.files[0] || loadingUpload) { return; }
-        this.loadingUpload = true;
-        let param = new FormData();
-        param.append('file', event.target.files[0]) // 通过append向form对象添加数据 
-        axios({
-          method: 'post',
-          url: `/songsUpload?d=${Date.now()}`,
-          data: param,
-          headers: {
-            'Content-type' : 'multipart/form-data'
-          }
-        }).then(res => {
-          this.loadingUpload = false;
-          inputUpload.value = '';
-          alert('上传成功');
-        }).catch(err => {
-          this.loadingUpload = false;
-          inputUpload.value = '';
-          alert('上传失败');
-        })
-      })
+		new Vue({
+			el: '#app',
+			data() {
+				return {
+					isLogin: false,
+					step: 0,
+					source: '',
+					sourceRangeList: [{
+						label: '全部评论(查询费较高)',
+						value: 0
+					}, {
+						label: '每首歌的前20万条',
+						value: 1
+					}, {
+						label: '最近三个月',
+						value: 2
+					}, {
+						label: '最近一个月',
+						value: 3
+					}],
+					sourceForm: {
+						nickname: '',
+						range: 0,
+						url: ''
+					},
+					queryLoading: false,
+					queryTip: '',
+					queryError: false,
+					queryErrorTip: '',
+					queryData: null,
+					payCode: '',
+					payLoading: false,
+					payTip: '',
+					payError: false,
+					payErrorTip: '',
+					result: [],
+					pausing: false,
+					alertModal: {
+						source: '',
+						title: '',
+						content: ''
+					},
+					loginTimer: null
+				}
+			},
+			mounted() {
+				// 查询是否有暂停过未查询的歌曲
+				const cookie = localStorage.getItem('cookie') || '';
+				this.isLogin = !!cookie;
+				axios(`/commentprogress?cookie=${cookie}&d=${Date.now()}`).then(res => {
+					if (res.data) {
+						this.step = 1;
+						this.pausing = true;
+						this.queryData = res.data;
+					}
+				}).catch((err) => {
+					alert(JSON.stringify(err))
+				});
+			},
+			methods: {
 
-      btnPriceName.addEventListener('click', () => {
-        if (loadingQuery) {
-          alert('查询完毕后才可操作')
-          return;
-        }
-        if (!inputId.value) {
-          alert('请完整输入用户昵称')
-          return;
-        }
-        if (loading) { return; }
-        loading = true;
-        textPrice.innerText = '查询中...';
-        const cookie = localStorage.getItem('cookie') || '';
-        const over = sessionStorage.getItem('over') === 'true'
-        axios(`/searchbynamecomment?over=${over}&cookie=${cookie}&username=${inputId.value.trim()}&d=${Date.now()}`).then(res => {
-          loading = false;
-          if (res.data.userId) {
-            sessionStorage.setItem('userId', res.data.userId);
-          }
-          let detail = '';
-          res.data._songs.forEach(item => {
-            detail += `<div><span>【${item.id}】${item.name}</span><var>${item.commentTotal}条</var></div>`;
-          });
-          textPrice.innerHTML = `<p>查询成功：共<var>${res.data.commentTotal}</var>条评论，需支付<var class="red">${res.data.money}</var>元，预计需要用时<var class="blue">${res.data.time}</var>完成，详细如下：</p>` + detail;
-          overTip(res.data.songsOver);
-        }).catch((err) => {
-          loading = false;
-          textPrice.innerText = '查询出错' + JSON.stringify(err.response.data);
-        })
-      })
+				/**
+				 * @method 从链接提取歌单id
+				 * @param url 分享链接
+				 */
+				getPlayListIdByUrl: function (url) {
+					const mobileRegex = /music.163.com\/playlist\/(\d+)\/(\d+)[\/|\?]/
+					const mobileShareRegex = /music.163.com\/m\/playlist\?id=(\d+)/
+					const pcRegex = /music.163.com\/#\/playlist\?id=(\d+)/
+					const pcVersionRegex = /music.163.com\/[m|#]\/playlist\?app_version=([\d|\.]+)&id=(\d+)/
 
-      btnPriceRecord.addEventListener('click', () => {
-        if (loadingQuery) {
-          alert('查询完毕后才可操作')
-          return;
-        }
-        if (!inputId.value) {
-          alert('请完整输入用户昵称')
-          return;
-        }
-        if (loading) { return; }
-        loading = true;
-        textPrice.innerText = '查询中...';
-        const cookie = localStorage.getItem('cookie') || '';
-        axios(`/searchbyrecordcomment?cookie=${cookie}&username=${inputId.value.trim()}&d=${Date.now()}`).then(res => {
-          loading = false;
-          if (res.data.userId) {
-            sessionStorage.setItem('userId', res.data.userId);
-          }
-          let detail = '';
-          res.data._songs.forEach(item => {
-            detail += `<div><span>【${item.id}】${item.name}</span><var>${item.commentTotal}条</var></div>`;
-          });
-          textPrice.innerHTML = `<p>查询成功：共<var>${res.data.commentTotal}</var>条，需支付<var class="red">${res.data.money}</var>元，预计需要用时<var class="blue">${res.data.time}</var>完成，详细如下：</p>` + detail;
-          overTip(res.data.songsOver);
-        }).catch((err) => {
-          loading = false;
-          textPrice.innerText = '查询出错' + JSON.stringify(err.response.data);
-        })
-      })
+					let match = url.match(mobileRegex);
+					if (match) {
+						return parseInt(match[1])
+					}
 
-      btnPricePlaylist.addEventListener('click', () => {
-        if (loadingQuery) {
-          alert('查询完毕后才可操作')
-          return;
-        }
-        if (!inputId.value) {
-          alert('请输入歌单id')
-          return;
-        }
-        if (loading) { return; }
-        loading = true;
-        textPrice.innerText = '查询中...';
-        const cookie = localStorage.getItem('cookie') || '';
-        axios(`/searchbyplaylistcomment?cookie=${cookie}&playlistId=${inputId.value}&d=${Date.now()}`).then(res => {
-          loading = false;
-          if (res.data.userId) {
-            sessionStorage.setItem('userId', res.data.userId);
-          }
-          let detail = '';
-          res.data._songs.forEach(item => {
-            detail += `<div><span>【${item.id}】${item.name}</span><var>${item.commentTotal}条</var></div>`;
-          });
-          textPrice.innerHTML = `<p>查询成功：共<var>${res.data.commentTotal}</var>条评论，需支付<var class="red">${res.data.money}</var>元，预计需要用时<var class="blue">${res.data.time}</var>完成，详细如下：</p>` + detail;
-          overTip(res.data.songsOver);
-        }).catch((err) => {
-          loading = false;
-          textPrice.innerText = '查询出错' + JSON.stringify(err.response.data);
-        })
-      })
+					match = url.match(mobileShareRegex);
+					if (match) {
+						return parseInt(match[1])
+					}
 
-      btnReset.addEventListener('click', () => {
-        if (loadingQuery) {
-          alert('查询完毕后才可操作')
-          return;
-        }
-        axios(`/clear?d=${Date.now()}`).then(res => {
-          loading = false;
-          alert('已清空，请重新查询')
-        }).catch(() => {
-          alert('操作失败')
-        })
-      })
+					match = url.match(pcRegex);
+					if (match) {
+						return parseInt(match[1])
+					}
 
-      btnQuery.addEventListener('click', () => {
-        if (loadingQuery) { return; }
-        const textId = inputId.value;
-        const userId = sessionStorage.getItem('userId');
-        if (!userId) {
-          alert('数据丢失，请完整输入用户昵称或歌单id，重新查询价格');
-          return;
-        }
-        const text = inputCode.value;
-        if (!text) {
-          alert('请输入验证码');
-          return;
-        }
-        loadingQuery = true;
-        query(text, userId)
-      })
+					match = url.match(pcVersionRegex);
+					console.log(match)
+					if (match) {
+						return parseInt(match[2])
+					}
+				},
 
-      btnLogin.addEventListener('click', () => {
-        let num = 0;
-        const t = setInterval(() => {
-          if (localStorage.getItem('cookie')) {
-            clearInterval(t);
-            btnLogin.style.display = 'none';
-            btnLogout.style.display = 'inline-block';
-            return;
-          }
-          num++;
-          if (num > 60) {
-            clearInterval(t);
-          }
-        }, 3000);
-        window.open(`${location.href}qrlogin.html`);
-      })
-      btnLogout.addEventListener('click', () => {
-        alert('已退出登录');
-        localStorage.clear();
-        btnLogout.style.display = 'none';
-        btnLogin.style.display = 'inline-block';
-      })
-      btnOverNo.addEventListener('click', () => {
-        const modal = document.getElementById('modal-over');
-        modal.style.display = 'none';
-      })
-      btnOverOk.addEventListener('click', () => {
-        sessionStorage.setItem('over', 'true');
-        const modal = document.getElementById('modal-over');
-        modal.style.display = 'none';
+				/**
+				 * @method 数据源选择
+				 * @param source 数据源类型：record、playlistTa、playlistMy
+				 */
+				sourceSelect: function (source) {
+					this.source = source;
+					this.sourceForm.nickname = '';
+					this.sourceForm.range = 0;
+					this.sourceForm.url = '';
+				},
 
-        if (loadingQuery) {
-          alert('查询完毕后才可操作')
-          return;
-        }
-        if (loading) { return; }
-        loading = true;
-        textPrice.innerText = '查询中...';
-        const cookie = localStorage.getItem('cookie') || '';
-        const over = sessionStorage.getItem('over') === 'true'
-        axios(`/searchbynamecomment?over=${over}&cookie=${cookie}&d=${Date.now()}`).then(res => {
-          loading = false;
-          if (res.data.userId) {
-            sessionStorage.setItem('userId', res.data.userId);
-          }
-          let detail = '';
-          res.data._songs.forEach(item => {
-            detail += `<div><span>【${item.id}】${item.name}</span><var>${item.commentTotal}条</var></div>`;
-          });
-          textPrice.innerHTML = `<p>查询成功：共<var>${res.data.commentTotal}</var>条评论，需支付<var class="red">${res.data.money}</var>元，预计需要用时<var class="blue">${res.data.time}</var>完成，详细如下：</p>` + detail;
-          overTip(res.data.songsOver);
-        }).catch((err) => {
-          loading = false;
-          textPrice.innerText = '查询出错' + JSON.stringify(err.response.data);
-        })
-      })
-    }());
+				/**
+				 * @method 阻止冒泡
+				 */
+				stoPpropagation: function() {
+					
+				},
 
-  </script>
+				/**
+				 * @method 数据源选择确定
+				 */
+				sourceNext: function () {
+					switch (this.source) {
+						case 'record':
+							if (!this.sourceForm.nickname) {
+								alert('请输入TA的网易云昵称')
+								return;
+							}
+							break;
+						case 'playlistTa':
+							if (!this.sourceForm.url) {
+								alert('请输入TA的歌单链接')
+								return;
+							}
+							break;
+						case 'playlistMy':
+							if (!this.sourceForm.nickname) {
+								alert('请输入TA的网易云昵称')
+								return;
+							}
+							if (!this.sourceForm.url) {
+								alert('请输入别人的歌单链接')
+								return;
+							}
+							break;
+						default:
+							break;
+					}
+					this.step = 1;
+					this.querySongs();
+				},
+
+				/**
+				 * @method 查询歌曲信息
+				 */
+				querySongs: function () {
+					if (this.queryLoading) { return; }
+					this.pausing = false;
+					this.queryError = false;
+					this.queryLoading = true;
+					this.queryTip = '正在获取歌曲列表...';
+					const cookie = localStorage.getItem('cookie') || '';
+					let req;
+					if (this.source === 'record') {
+						req = axios(`/commentbyrecord?nickname=${this.sourceForm.nickname}&cookie=${cookie}&d=${Date.now()}`)
+					} else if (this.source === 'playlistTa') {
+						const id = this.getPlayListIdByUrl(this.sourceForm.url);
+						if (!id) {
+							this.queryLoading = false;
+							this.queryError = true;
+							this.queryErrorTip = '歌单url解析错误';
+							return;
+						}
+						req = axios(`/commentbyplaylistta?playlistId=${id}&cookie=${cookie}&d=${Date.now()}`)
+					} else if (this.source === 'playlistMy') {
+						const id = this.getPlayListIdByUrl(this.sourceForm.url);
+						if (!id) {
+							this.queryLoading = false;
+							this.queryError = true;
+							this.queryErrorTip = '歌单url解析错误';
+							return;
+						}
+						req = axios(`/commentbyplaylistmy?nickname=${this.sourceForm.nickname}&playlistId=${id}&cookie=${cookie}&d=${Date.now()}`)
+					}
+					req.then(res => {
+						this.queryLoading = false;
+						this.queryData = res.data;
+						this.queryTime();
+					}).catch((err) => {
+						this.queryLoading = false;
+						this.queryError = true;
+						this.queryErrorTip = JSON.stringify(err.response ? err.response.data : err);
+					})
+				},
+
+				/**
+				 * @method 计算预计需要查询时间
+				 */
+				queryTime: function () {
+					if (this.queryLoading) { return; }
+					this.queryError = false;
+					this.queryLoading = true;
+					this.queryTip = '正在计算查询费用...';
+					const cookie = localStorage.getItem('cookie') || '';
+					axios(`/commenttime?range=${this.sourceForm.range}&cookie=${cookie}&d=${Date.now()}`).then(res => {
+						this.queryLoading = false;
+						this.queryData = res.data;
+						this.queryComment();
+					}).catch((err) => {
+						this.queryLoading = false;
+						this.queryError = true;
+						console.log(err)
+						this.queryErrorTip = JSON.stringify(err.response ? err.response.data : err);
+					});
+				},
+
+				/**
+				 * @method 查询歌曲评论
+				 */
+				queryComment: function (errFind) {
+					const t = setTimeout(() => {
+						clearTimeout(t);
+						const cookie = localStorage.getItem('cookie') || '';
+						axios(`/commentquery?cookie=${cookie}&d=${Date.now()}&errFind=${!!errFind}`).then(res => {
+							this.queryData = res.data;
+							if (this.pausing) {
+								return;
+							}
+							if (this.queryData.status === 1) {
+								this.queryComment();
+							} else if (this.queryData.status === 2) {
+								if (this.queryData.commentTaTotal) {
+									this.step++;
+								}
+							}
+						}).catch((err) => {
+							console.log(err)
+							this.queryData.status = 0;
+							this.queryLoading = false;
+							this.queryError = true;
+							this.queryErrorTip = JSON.stringify(err.response ? err.response.data : err);
+						});
+					}, 1000);
+				},
+
+				/**
+				 * @method 暂停查询
+				 */
+				queryPause: function () {
+					if (this.queryLoading) { return; }
+					this.queryError = false;
+					this.queryLoading = true;
+					this.queryTip = '正在暂停...';
+					const cookie = localStorage.getItem('cookie') || '';
+					axios(`/commentquerypause?cookie=${cookie}&d=${Date.now()}`).then(res => {
+						this.queryLoading = false;
+						this.pausing = true;
+					}).catch((err) => {
+						console.log(err)
+						this.queryError = true;
+						this.queryLoading = false;
+						this.queryErrorTip = JSON.stringify(err.response ? err.response.data : err);
+					});
+				},
+
+				/**
+				 * @method 重新查询
+				 */
+				queryRestart: function () {
+					if (this.queryLoading) { return; }
+					this.queryError = false;
+					this.queryLoading = true;
+					this.queryTip = '正在重新查询...';
+					const cookie = localStorage.getItem('cookie') || '';
+					axios(`/commentqueryrestart?cookie=${cookie}&d=${Date.now()}`).then(res => {
+						this.queryLoading = false;
+						this.pausing = false;
+						this.queryComment();
+					}).catch((err) => {
+						console.log(err)
+						this.queryError = true;
+						this.queryLoading = false;
+						this.queryErrorTip = JSON.stringify(err.response ? err.response.data : err);
+					});
+				},
+
+				/**
+				 * @method 重置并返回
+				 */
+				queryReset: function () {
+					if (this.queryLoading) { return; }
+					this.queryError = false;
+					this.queryLoading = true;
+					this.queryTip = '正在重置数据...';
+					const cookie = localStorage.getItem('cookie') || '';
+					axios(`/clear?cookie=${cookie}&d=${Date.now()}`).then(res => {
+						this.step = 0;
+						this.queryLoading = false;
+					}).catch((err) => {
+						console.log(err)
+						this.queryLoading = false;
+						this.queryError = true;
+						this.queryErrorTip = JSON.stringify(err.response ? err.response.data : err);
+					});
+				},
+
+				/**
+				 * @method 查询歌曲评论
+				 */
+				payNext: function() {
+					if (!this.payCode) {
+						alert('请输入验证码');
+						return;
+					}
+					this.payLoading = true;
+					this.payError = false;
+					this.payTip = '正在查询结果...';
+					const cookie = localStorage.getItem('cookie') || '';
+					axios(`/commentresult?code=${this.payCode}&cookie=${cookie}&d=${Date.now()}`).then(res => {
+						this.result = res.data;
+						this.step = 3;
+						this.payLoading = false;
+						this.payError = false;
+					}).catch((err) => {
+						console.log(err)
+						this.payLoading = false;
+						this.payError = true;
+						this.payErrorTip = JSON.stringify(err.response ? err.response.data : err);
+					});
+				},
+
+				/**
+				 * @method 查询歌曲评论
+				 */
+				payIntro: function() {
+					this.alertModal.title = '计费说明';
+					this.alertModal.content = '计算公式：总费用=实际查询评论数÷3000×0.01。<br>如：一首歌总评论数200000，在第6000条评论中找到TA的评论，所需费用为：6000÷3000×0.01=0.02元。<br>若200000条评论中未找到TA的评论，所需费用为：200000÷3000×0.01=0.66元。<br>以此累加得到总费用。';
+				},
+
+				/**
+				 * @method 点赞
+				 */
+				like: function () {
+					alert('点赞属于付费功能，请联系我微信！');
+				},
+
+				/**
+				 * @method 评论
+				 */
+				reply: function () {
+					alert('回复属于付费功能，请联系我微信！');
+				},
+
+				checkStatus: async function (key) {
+					const res = await axios({
+						url: `/login/qr/check?key=${key}&timerstamp=${Date.now()}`,
+					})
+					return res.data
+				},
+				getLoginStatus: async function (cookie = '') {
+					const res = await axios({
+						url: `/login/status?timerstamp=${Date.now()}`,
+						method: 'post',
+						data: {
+							cookie,
+						},
+					})
+					// document.querySelector('#info').innerText = JSON.stringify(res.data, null, 2)
+				},
+				login: async function () {
+					const cookie = localStorage.getItem('cookie')
+					this.getLoginStatus(cookie)
+					const res = await axios({
+						url: `/login/qr/key?timerstamp=${Date.now()}`,
+					})
+					const key = res.data.data.unikey
+					const res2 = await axios({
+						url: `/login/qr/create?key=${key}&qrimg=true&timerstamp=${Date.now()}`,
+					})
+					this.alertModal.source = 'login';
+					this.alertModal.title = '打开网易云音乐APP扫码登录';
+					this.alertModal.content = `<div style="text-align:center;"><img src="${res2.data.data.qrimg}"/></div>`;
+					document.getElementById('btnAlert').click();
+					
+					this.loginTimer = setInterval(async () => {
+						const statusRes = await this.checkStatus(key)
+						if (statusRes.code === 800) {
+							alert('二维码已过期,请重新获取')
+							clearInterval(this.loginTimer)
+						}
+						if (statusRes.code === 803) {
+							// 这一步会返回cookie
+							clearInterval(this.loginTimer)
+							this.alertModal.title = '登录成功';
+							await this.getLoginStatus(statusRes.cookie)
+							this.isLogin = true;
+							localStorage.setItem('cookie', statusRes.cookie)
+							document.getElementById('btnAlertClose').click();
+						}
+					}, 3000)
+				},
+
+				/**
+				 * @method 监听提示对话框关闭
+				 */
+				alertClose: function() {
+					if (this.alertModal.source === 'login') {
+						if (this.loginTimer) {
+							clearInterval(this.loginTimer);
+							this.loginTimer = null;
+						}
+					}
+				},
+
+				/**
+				 * @method 退出登录
+				 */
+				logout: function(params) {
+					const cookie = localStorage.getItem('cookie')
+					axios({
+						url: `/logout?cookie=${cookie}&d=${Date.now()}`
+					}).then(res => {
+						localStorage.removeItem('cookie');
+						this.isLogin = false;
+						this.alertModal.title = '退出成功';
+						this.alertModal.content = '您已退出登录';
+						document.getElementById('btnAlert').click();
+					}).catch((err) => {
+						localStorage.removeItem('cookie');
+						this.isLogin = false;
+						this.alertModal.title = '退出成功';
+						this.alertModal.content = '您已退出登录';
+						document.getElementById('btnAlert').click();
+					});
+				},
+
+			}
+		});
+
+		
+	</script>
+
+	<!--  popper.min.js 用于弹窗、提示、下拉菜单 -->
+	<script src="./js/popper.min.js"></script>
+
+	<!-- 最新的 Bootstrap5 核心 JavaScript 文件 -->
+	<script src="./js/bootstrap.min.js"></script>
+
+	<script src="./js/iconfont.js"></script>
+
 </body>
 
 </html>
