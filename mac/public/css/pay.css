@@ -73,3 +73,11 @@
   width: 0;
   flex: 0 0 200px;
 }
+
+.pay  .pay-btns {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 15px;
+  padding-bottom: 15px;
+}

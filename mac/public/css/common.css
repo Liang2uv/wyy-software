@@ -45,19 +45,25 @@ li {
 
 #app > main {
   position: relative;
-  min-height: calc(100vh - 120px);
+  min-height: calc(100vh - 130px);
 }
 
-#app > main .login {
-  position: absolute;
-  bottom: 30px;
-  left: 15px;
-  color: #676869;
-  cursor: pointer;
+.advanced-form .advanced-item {
+  display: flex;
+  align-items: center;
 }
 
-#app > main .login:hover {
-  color: #0a58ca;
+.advanced-form .advanced-item label {
+  flex: 0 0 85px;
+  margin-right: 10px;
+  margin-bottom: 0;
+  line-height: 1;
+  text-align: right;
+}
+
+.advanced-form .tip {
+  font-size: 12px;
+  color: #777;
 }
 
 .sp-circle {

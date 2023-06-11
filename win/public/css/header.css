@@ -1,8 +1,25 @@
 header {
   display: flex;
   align-items: center;
-  padding: 20px 0;
+  padding: 40px 0 20px 0;
   border-bottom: 1px solid #ddd;
+  position: relative;
+}
+
+header .btns {
+  position: absolute;
+  top: 5px;
+  right: 0px;
+}
+
+header .btns a {
+  color: #777 !important;
+  cursor: pointer;
+  margin-left: 15px;
+}
+
+header .btns a:hover {
+  color: #0a58ca !important;
 }
 
 header nav {

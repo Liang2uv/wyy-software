@@ -59,7 +59,7 @@
   border: 1px solid #ddd;
   padding: 15px;
   border-radius: 10px;
-  max-height: calc(100vh - 300px);
+  max-height: calc(100vh - 350px);
 }
 
 .query ul.query-songs > li {
@@ -68,7 +68,7 @@
 
 .query ul.query-songs > li > p {
   font-size: 14px;
-  color: #666;
+  color: #337ab7;
 }
 
 .query ul.query-songs > li > ol {

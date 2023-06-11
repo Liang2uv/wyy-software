@@ -4,8 +4,9 @@
 <head>
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>查询</title>
-  <link rel="icon" class="js-site-favicon" type="image/svg+xml" href="https://github.githubassets.com/favicons/favicon.svg">
+	<title>网易云查询v1.0.4</title>
+	<link rel="icon" class="js-site-favicon" type="image/svg+xml"
+		href="https://github.githubassets.com/favicons/favicon.svg">
 	<!-- 新 Bootstrap 核心 CSS 文件 -->
 	<link rel="stylesheet" href="./css/bootstrap.min.css">
 	<link rel="stylesheet" href="./css/common.css">
@@ -23,9 +24,15 @@
 
 	<div id="app">
 		<header>
+			<div class="btns">
+				<a data-bs-toggle="modal" data-bs-target="#advancedModal" @click="advancedOpen">高级设置</a>
+				<a v-if="!isLogin" @click="login">登录</a>
+				<a v-if="isLogin" @click="logout">退出登录</a>
+			</div>
 			<nav v-bind:class="{active: step >= 0 }">1.选择数据源</nav>
 			<nav v-bind:class="{active: step >= 1 }">2.开始查询</nav>
-			<nav v-bind:class="{active: step >= 2 }" @click="payIntro" data-bs-toggle="modal" data-bs-target="#alertModal">3.支付查询费</nav>
+			<nav v-bind:class="{active: step >= 2 }" @click="payIntro" data-bs-toggle="modal" data-bs-target="#alertModal">
+				3.支付查询费</nav>
 			<nav v-bind:class="{active: step >= 3 }">4.查看结果</nav>
 		</header>
 		<main>
@@ -68,7 +75,7 @@
 							</div>
 							<div>
 								<label for="text" class="form-label">查询范围:</label>
-								<select class="form-select" v-model="sourceForm.range">	
+								<select class="form-select" v-model="sourceForm.range">
 									<option v-for="item in sourceRangeList" :value="item.value">{{ item.label }}</option>
 								</select>
 							</div>
@@ -113,11 +120,11 @@
 				<div class="alert alert-danger" v-if="queryError">
 					查询出错：{{ queryErrorTip }}
 				</div>
-				<div class="alert alert-warning" v-if="queryData.status === 1">
-					{{ pausing ? '已暂停，可关闭本页面下次继续查' : '查询中...请勿关闭浏览器和app.exe黑窗口，windows用户请延长睡眠断网时间' }}
+				<div class="alert alert-warning" v-if="queryData && queryData.status === 1">
+					{{ pausing ? '已暂停，可关闭本页面下次继续查' : '查询中...请勿刷新或关闭本页面和app黑窗口终端，windows用户请操作：设置-系统-电源与睡眠-永不睡眠' }}
 				</div>
-				<div class="alert alert-warning" v-if="queryData.status === -1">
-					如出现“网络太拥挤,请稍候再试!”，请点击“{{ isLogin ? '退出登录' : '登录' }}”，再点击“重查出错歌曲”
+				<div class="alert alert-warning" v-if="queryData && queryData.status === -1">
+					由于网易检测机制，若出现“网络太拥挤,请稍候再试!”，请点击“出错重试”
 				</div>
 				<div class="query-grid" v-if="queryData">
 					<div>
@@ -137,7 +144,8 @@
 						<var>{{ queryData.time || '--' }}</var>
 					</div>
 					<div>
-						<label style="cursor: pointer;" @click="payIntro" data-bs-toggle="modal" data-bs-target="#alertModal">预计查询费用 <i class="iconfont icon-wenhao-xianxingyuankuang"></i></label>
+						<label style="cursor: pointer;" @click="payIntro" data-bs-toggle="modal" data-bs-target="#alertModal">预计查询费用
+							<i class="iconfont icon-wenhao-xianxingyuankuang"></i></label>
 						<var>{{ queryData.money || '--' }} <small>元</small> </var>
 					</div>
 					<div>
@@ -162,19 +170,29 @@
 						</ol>
 					</li>
 				</ul>
+				<div class="query-btns" v-if="!queryData && !queryLoading">
+					<button type="button" class="btn btn-danger" @click="step--">上一步</button>
+				</div>
 				<div class="query-btns" v-if="queryData && queryData.status === 1">
-					<button type="button" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="返回将清空数据!" @click="queryReset" v-if="pausing">重置并返回</button>
+					<button type="button" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="返回将清空数据!"
+						@click="queryReset" v-if="pausing">重置并返回</button>
 					<button type="button" class="btn btn-primary" @click="queryPause" v-if="!pausing">暂停</button>
-					<button type="button" class="btn btn-primary" @click="queryRestart" v-if="pausing">继续</button>
-					<button type="button" class="btn btn-success" v-if="pausing && queryData.commentTaTotal" data-bs-toggle="modal" data-bs-target="#resultModal">查看结果</button>
+					<button type="button" class="btn btn-primary" @click="queryRestart" v-if="pausing">继续查询</button>
+					<button type="button" class="btn btn-success" v-if="pausing && queryData.commentTaTotal"
+						data-bs-toggle="modal" data-bs-target="#resultModal">查看结果</button>
 				</div>
 				<div class="query-btns" v-if="queryData && queryData.status === -1">
-					<button type="button" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="返回将清空数据!" @click="queryReset">重置并返回</button>
-					<button type="button" class="btn btn-primary" @click="queryComment(true)">重查出错歌曲</button>
-					<button type="button" class="btn btn-success" v-if="queryData.commentTaTotal" data-bs-toggle="modal" data-bs-target="#resultModal">查看结果</button>
+					<button type="button" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="返回将清空数据!"
+						@click="queryReset">重置并返回</button>
+					<button type="button" class="btn btn-primary" @click="queryComment(true)" v-if="retrySeconds">出错重试({{
+						retrySeconds }} S)</button>
+					<button type="button" class="btn btn-primary" @click="queryComment(true)" v-if="!retrySeconds">出错重试</button>
+					<button type="button" class="btn btn-success" v-if="queryData.commentTaTotal" data-bs-toggle="modal"
+						data-bs-target="#resultModal">查看结果</button>
 				</div>
 				<div class="query-btns" v-if="queryData && queryData.status === 2">
-					<button type="button" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="返回将清空数据!" @click="queryReset">返回</button>
+					<button type="button" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="返回将清空数据!"
+						@click="queryReset">返回</button>
 				</div>
 			</div>
 			<!-- 支付查询费 -->
@@ -185,6 +203,13 @@
 				</div>
 				<div class="alert alert-danger" v-if="payError">
 					查询出错：{{ payErrorTip }}
+				</div>
+				<div class="alert alert-warning" v-if="queryLoading">
+					<span class="sp sp-circle"></span>
+					{{ queryTip }}
+				</div>
+				<div class="alert alert-danger" v-if="queryError">
+					查询出错：{{ queryErrorTip }}
 				</div>
 				<h1>1. 共找到 <var>{{ queryData.commentTaTotal }}</var> 条评论，请支付 <var>¥{{ queryData.money }}</var> 查看结果</h1>
 				<ul>
@@ -200,8 +225,13 @@
 				<form>
 					<label for="text" class="form-label">2. 验证码</label>
 					<input type="text" class="form-control" placeholder="支付后获取" v-model="payCode">
-					<button type="button" class="btn btn-primary" @click="payNext()">确定</button>
+					<button type="button" class="btn btn-primary" @click="payNext()">下一步</button>
 				</form>
+				<div class="pay-btns">
+					<p>放弃后将清空查询结果，谨慎操作！</p>
+					<button type="button" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="返回将清空数据!"
+						@click="queryReset">放弃查看</button>
+				</div>
 			</div>
 			<!-- 查看结果 -->
 			<div class="result" v-if="step === 3">
@@ -220,15 +250,20 @@
 								<img :src="pc.user.avatarUrl" alt="">
 								<div class="msg">
 									<div class="content">
-										<a :title="pc.user.userId" target="_blank" :href="'https://music.163.com/#/user/home?id=' + pc.user.userId">{{ pc.user.nickname }}：</a><span :title="pc.id">{{ pc.content || pc.richContent }}</span>
+										<a :title="pc.user.userId" target="_blank"
+											:href="'https://music.163.com/#/user/home?id=' + pc.user.userId">{{ pc.user.nickname }}：</a><span
+											:title="pc.id">{{ pc.content || pc.richContent }}</span>
 									</div>
 									<div class="content-inner" v-if="pc.beReplied.length">
 										<div class="content" v-for="cc in pc.beReplied">
-											<a :title="cc.user.userId" target="_blank" :href="'https://music.163.com/#/user/home?id=' + cc.user.userId">{{ cc.user.nickname }}：</a><span :title="cc.id">{{ cc.content || cc.richContent }}</span>
+											<a :title="cc.user.userId" target="_blank"
+												:href="'https://music.163.com/#/user/home?id=' + cc.user.userId">{{ cc.user.nickname
+												}}：</a><span :title="cc.id">{{ cc.content || cc.richContent }}</span>
 										</div>
 									</div>
 									<div class="time">
-										<var :title="pc.ipLocation.ip">{{ pc.timeStr || '2022-11-22 12:00:23' }}&nbsp;&nbsp;{{ pc.ipLocation.location }}</var>
+										<var :title="pc.ipLocation.ip">{{ pc.timeStr }}&nbsp;&nbsp;{{ pc.ipLocation.location
+											}}&nbsp;&nbsp;评论id: {{ pc.id }}</var>
 										<span>
 											<i class="iconfont icon--like-fill" v-if="pc.liked" @click="like"></i>
 											<i class="iconfont icon--like" v-if="!pc.liked" @click="like"></i>
@@ -243,12 +278,10 @@
 				</ul>
 				<div class="result-btns">
 					<p>请截图保存，刷新后不可恢复！</p>
-					<button type="button" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="返回将清空数据!" @click="queryReset">重置并返回</button>
+					<button type="button" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="返回将清空数据!"
+						@click="queryReset">重置并返回</button>
 				</div>
 			</div>
-			<!-- 登录退出登录 -->
-			<a class="login" v-show="!isLogin" @click="login">登录</a>
-			<a class="login" v-show="isLogin" @click="logout">退出登录</a>
 		</main>
 
 		<!-- alert框 -->
@@ -263,12 +296,14 @@
 						<div v-html="alertModal.content"></div>
 					</div>
 					<div class="modal-footer">
-						<button id="btnAlertClose" type="button" class="btn btn-danger" data-bs-dismiss="modal" @click="alertClose">关闭</button>
+						<button id="btnAlertClose" type="button" class="btn btn-danger" data-bs-dismiss="modal"
+							@click="alertClose">关闭</button>
 					</div>
 				</div>
 			</div>
 		</div>
-		<button id="btnAlert" type="button" class="btn btn-success" v-show="false" data-bs-toggle="modal" data-bs-target="#alertModal"></button>
+		<button id="btnAlert" type="button" class="btn btn-success" v-show="false" data-bs-toggle="modal"
+			data-bs-target="#alertModal"></button>
 
 		<!-- 提示查看结果 -->
 		<div class="modal" id="resultModal">
@@ -282,30 +317,68 @@
 						<div>当前进度将被清空，请谨慎操作！</div>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="step++">确认</button>
+						<button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="resultByError">确认</button>
 					</div>
 				</div>
 			</div>
 		</div>
 
+		<!-- 高级设置 -->
+		<div class="modal" id="advancedModal">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title">高级设置</h4>
+						<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+					</div>
+					<div class="modal-body">
+						<form class="advanced-form">
+							<div class="mb-3 advanced-item">
+								<label for="text" class="form-label">代理IP:</label>
+								<input type="text" class="form-control" placeholder="如：https://150.158.18.5:7890" v-model="advancedForm.proxy">
+							</div>
+							<div class="mb-3 advanced-item">
+								<label for="text" class="form-label">最大线程数:</label>
+								<input type="number" class="form-control" placeholder="请输入3 ~ 30" v-model="advancedForm.thread">
+							</div>
+							<div class="mb-3 form-check form-switch">
+								<label class="form-check-label" for="mySwitch">单首歌查到评论后还继续往下查</label>
+								<input class="form-check-input" type="checkbox" id="mySwitch" name="darkmode" value="yes" v-model="advancedForm.loopAll">
+								<p class="tip">开启后查询费变多，查询时间变长</p>
+							</div>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="advancedOk">确定修改</button>
+					</div>
+				</div>
+			</div>
+		</div>
 
 	</div>
 
 	<script>
-
 		new Vue({
 			el: '#app',
 			data() {
 				return {
+					advancedForm: {
+						thread: 5,
+						proxy: '',
+						loopAll: false
+					},
+					thread: 5,
+					proxy: '',
+					loopAll: false,
 					isLogin: false,
 					step: 0,
 					source: '',
 					sourceRangeList: [{
-						label: '全部评论(查询费较高)',
-						value: 0
-					}, {
 						label: '每首歌的前20万条',
 						value: 1
+					}, {
+						label: '全部评论(查询费较高)',
+						value: 0
 					}, {
 						label: '最近三个月',
 						value: 2
@@ -315,7 +388,7 @@
 					}],
 					sourceForm: {
 						nickname: '',
-						range: 0,
+						range: 1,
 						url: ''
 					},
 					queryLoading: false,
@@ -335,22 +408,60 @@
 						title: '',
 						content: ''
 					},
-					loginTimer: null
+					loginTimer: null,
+					retryTimer: null,
+					retrySeconds: 0
 				}
 			},
 			mounted() {
 				// 查询是否有暂停过未查询的歌曲
 				const cookie = localStorage.getItem('cookie') || '';
 				this.isLogin = !!cookie;
-				axios(`/commentprogress?cookie=${cookie}&d=${Date.now()}`).then(res => {
+				axios.get('/commentprogress', {
+					params: {
+						cookie,
+						d: Date.now(),
+						proxy: this.proxy
+					}
+				}).then(res => {
 					if (res.data) {
 						this.step = 1;
-						this.pausing = true;
 						this.queryData = res.data;
+						this.pausing = this.queryData.status === 1;
+						if (this.queryData.status === 2) {
+							// 查询是否有未支付的结果
+							axios.get('/commentresultnopay', {
+								params: {
+									cookie,
+									d: Date.now(),
+									proxy: this.proxy
+								}
+							}).then(res => {
+								if (res.data.data) {
+									this.step = 2;
+								} else {
+									this.step = 0;
+								}
+							}).catch((err) => {
+								alert(JSON.stringify(err))
+							});
+						}
+					} else {
+						this.pausing = false;
 					}
 				}).catch((err) => {
 					alert(JSON.stringify(err))
 				});
+
+				// 高级设置
+				const stroeStr = localStorage.getItem('advanced');
+				if (stroeStr) {
+					const stroe = JSON.parse(stroeStr);
+					this.thread = stroe.thread || 5;
+					this.proxy = stroe.proxy || '';
+					this.loopAll = stroe.loopAll === true;
+				}
+				
 			},
 			methods: {
 
@@ -359,31 +470,37 @@
 				 * @param url 分享链接
 				 */
 				getPlayListIdByUrl: function (url) {
-					const mobileRegex = /music.163.com\/playlist\/(\d+)\/(\d+)[\/|\?]/
-					const mobileShareRegex = /music.163.com\/m\/playlist\?id=(\d+)/
-					const pcRegex = /music.163.com\/#\/playlist\?id=(\d+)/
-					const pcVersionRegex = /music.163.com\/[m|#]\/playlist\?app_version=([\d|\.]+)&id=(\d+)/
-
-					let match = url.match(mobileRegex);
-					if (match) {
-						return parseInt(match[1])
+					const regexGroup = [
+						{
+							regex: /music.163.com\/playlist\/(\d+)\/(\d+)[\/|\?]/,
+							targetIndex: 1
+						},
+						{
+							regex: /music.163.com\/m\/playlist\?id=(\d+)/,
+							targetIndex: 1
+						},
+						{
+							regex: /music.163.com\/#\/playlist\?id=(\d+)/,
+							targetIndex: 1
+						},
+						{
+							regex: /music.163.com\/[m|#]\/playlist\?app_version=([\d|\.]+)&id=(\d+)/,
+							targetIndex: 2
+						},
+						{
+							regex: /music.163.com\/playlist\?id=(\d+)/,
+							targetIndex: 1
+						}
+					];
+					let id = 0;
+					for (const item of regexGroup) {
+						let match = url.trim().match(item.regex);
+						if (match) {
+							id = parseInt(match[item.targetIndex]);
+							break;
+						}
 					}
-
-					match = url.match(mobileShareRegex);
-					if (match) {
-						return parseInt(match[1])
-					}
-
-					match = url.match(pcRegex);
-					if (match) {
-						return parseInt(match[1])
-					}
-
-					match = url.match(pcVersionRegex);
-					console.log(match)
-					if (match) {
-						return parseInt(match[2])
-					}
+					return id;
 				},
 
 				/**
@@ -393,15 +510,15 @@
 				sourceSelect: function (source) {
 					this.source = source;
 					this.sourceForm.nickname = '';
-					this.sourceForm.range = 0;
+					this.sourceForm.range = 1;
 					this.sourceForm.url = '';
 				},
 
 				/**
 				 * @method 阻止冒泡
 				 */
-				stoPpropagation: function() {
-					
+				stoPpropagation: function () {
+
 				},
 
 				/**
@@ -450,7 +567,14 @@
 					const cookie = localStorage.getItem('cookie') || '';
 					let req;
 					if (this.source === 'record') {
-						req = axios(`/commentbyrecord?nickname=${this.sourceForm.nickname}&cookie=${cookie}&d=${Date.now()}`)
+						req = axios.get('/commentbyrecord', {
+							params: {
+								nickname: this.sourceForm.nickname.trim(),
+								cookie: cookie,
+								d: Date.now(),
+								proxy: this.proxy
+							}
+						})
 					} else if (this.source === 'playlistTa') {
 						const id = this.getPlayListIdByUrl(this.sourceForm.url);
 						if (!id) {
@@ -459,7 +583,14 @@
 							this.queryErrorTip = '歌单url解析错误';
 							return;
 						}
-						req = axios(`/commentbyplaylistta?playlistId=${id}&cookie=${cookie}&d=${Date.now()}`)
+						req = axios.get('/commentbyplaylistta', {
+							params: {
+								playlistId: id,
+								cookie: cookie,
+								d: Date.now(),
+								proxy: this.proxy
+							}
+						})
 					} else if (this.source === 'playlistMy') {
 						const id = this.getPlayListIdByUrl(this.sourceForm.url);
 						if (!id) {
@@ -468,7 +599,15 @@
 							this.queryErrorTip = '歌单url解析错误';
 							return;
 						}
-						req = axios(`/commentbyplaylistmy?nickname=${this.sourceForm.nickname}&playlistId=${id}&cookie=${cookie}&d=${Date.now()}`)
+						req = axios.get('/commentbyplaylistmy', {
+							params: {
+								nickname: this.sourceForm.nickname.trim(),
+								playlistId: id,
+								cookie: cookie,
+								d: Date.now(),
+								proxy: this.proxy
+							}
+						})
 					}
 					req.then(res => {
 						this.queryLoading = false;
@@ -490,7 +629,15 @@
 					this.queryLoading = true;
 					this.queryTip = '正在计算查询费用...';
 					const cookie = localStorage.getItem('cookie') || '';
-					axios(`/commenttime?range=${this.sourceForm.range}&cookie=${cookie}&d=${Date.now()}`).then(res => {
+					axios.get('/commenttime', {
+						params: {
+							range: this.sourceForm.range,
+							thread: this.thread,
+							cookie: cookie,
+							d: Date.now(),
+							proxy: this.proxy
+						}
+					}).then(res => {
 						this.queryLoading = false;
 						this.queryData = res.data;
 						this.queryComment();
@@ -506,10 +653,41 @@
 				 * @method 查询歌曲评论
 				 */
 				queryComment: function (errFind) {
+					if (errFind) {
+						if (this.retryTimer) {
+							clearInterval(this.retryTimer);
+							this.retrySeconds = 0;
+							this.retryTimer = null;
+						}
+						const cookieLocal = localStorage.getItem('cookie') || '';
+						const cookieSession = sessionStorage.getItem('cookie') || '';
+						if (cookieLocal && cookieSession) { // 已经登录就退出登录
+							sessionStorage.setItem('cookie', cookieLocal);
+							localStorage.removeItem('cookie');
+							this.isLogin = false;
+						} else if (!cookieLocal && cookieSession) {	// 没登录就使用之前已经登录的cookie发送请求
+							localStorage.setItem('cookie', cookieSession);
+							this.isLogin = true;
+						} else if (cookieLocal && !cookieSession) {	// 刚登录
+							sessionStorage.setItem('cookie', cookieLocal);
+							this.isLogin = true;
+						} else {
+							alert('请点击右上角登录');
+							return;
+						}
+					}
 					const t = setTimeout(() => {
 						clearTimeout(t);
 						const cookie = localStorage.getItem('cookie') || '';
-						axios(`/commentquery?cookie=${cookie}&d=${Date.now()}&errFind=${!!errFind}`).then(res => {
+						axios.get('/commentquery', {
+							params: {
+								cookie: cookie,
+								d: Date.now(),
+								errFind: !!errFind,
+								proxy: this.proxy,
+								loopAll: this.loopAll
+							}
+						}).then(res => {
 							this.queryData = res.data;
 							if (this.pausing) {
 								return;
@@ -520,6 +698,8 @@
 								if (this.queryData.commentTaTotal) {
 									this.step++;
 								}
+							} else if (this.queryData.status === -1) {
+								this.queryRetryCount();
 							}
 						}).catch((err) => {
 							console.log(err)
@@ -528,6 +708,21 @@
 							this.queryError = true;
 							this.queryErrorTip = JSON.stringify(err.response ? err.response.data : err);
 						});
+					}, 1500);
+				},
+
+				/**
+				 * @method 重试倒计时
+				 */
+				queryRetryCount: function () {
+					this.retrySeconds = 120;
+					this.retryTimer = setInterval(() => {
+						this.retrySeconds--;
+						if (this.retrySeconds === 0) {
+							clearInterval(this.retryTimer);
+							this.retryTimer = null;
+							this.queryComment(true);
+						}
 					}, 1000);
 				},
 
@@ -540,7 +735,13 @@
 					this.queryLoading = true;
 					this.queryTip = '正在暂停...';
 					const cookie = localStorage.getItem('cookie') || '';
-					axios(`/commentquerypause?cookie=${cookie}&d=${Date.now()}`).then(res => {
+					axios.get('/commentquerypause', {
+						params: {
+							cookie: cookie,
+							d: Date.now(),
+							proxy: this.proxy
+						}
+					}).then(res => {
 						this.queryLoading = false;
 						this.pausing = true;
 					}).catch((err) => {
@@ -560,7 +761,13 @@
 					this.queryLoading = true;
 					this.queryTip = '正在重新查询...';
 					const cookie = localStorage.getItem('cookie') || '';
-					axios(`/commentqueryrestart?cookie=${cookie}&d=${Date.now()}`).then(res => {
+					axios.get('/commentqueryrestart', {
+						params: {
+							cookie: cookie,
+							d: Date.now(),
+							proxy: this.proxy
+						}
+					}).then(res => {
 						this.queryLoading = false;
 						this.pausing = false;
 						this.queryComment();
@@ -580,8 +787,19 @@
 					this.queryError = false;
 					this.queryLoading = true;
 					this.queryTip = '正在重置数据...';
+					if (this.retryTimer) {
+						clearInterval(this.retryTimer);
+						this.retrySeconds = 0;
+						this.retryTimer = null;
+					}
 					const cookie = localStorage.getItem('cookie') || '';
-					axios(`/clear?cookie=${cookie}&d=${Date.now()}`).then(res => {
+					axios.get('/clear', {
+						params: {
+							cookie: cookie,
+							d: Date.now(),
+							proxy: this.proxy
+						}
+					}).then(res => {
 						this.step = 0;
 						this.queryLoading = false;
 					}).catch((err) => {
@@ -593,9 +811,21 @@
 				},
 
 				/**
+				 * @method 明知错误的情况下继续查看结果
+				 */
+				resultByError: function () {
+					if (this.retryTimer) {
+						clearInterval(this.retryTimer);
+						this.retrySeconds = 0;
+						this.retryTimer = null;
+					}
+					this.step++;
+				},
+
+				/**
 				 * @method 查询歌曲评论
 				 */
-				payNext: function() {
+				payNext: function () {
 					if (!this.payCode) {
 						alert('请输入验证码');
 						return;
@@ -604,8 +834,15 @@
 					this.payError = false;
 					this.payTip = '正在查询结果...';
 					const cookie = localStorage.getItem('cookie') || '';
-					axios(`/commentresult?code=${this.payCode}&cookie=${cookie}&d=${Date.now()}`).then(res => {
-						this.result = res.data;
+					axios.get('/commentresult', {
+						params: {
+							code: this.payCode.trim(),
+							cookie: cookie,
+							d: Date.now(),
+							proxy: this.proxy
+						}
+					}).then(res => {
+						this.result = res.data.songs || [];
 						this.step = 3;
 						this.payLoading = false;
 						this.payError = false;
@@ -620,7 +857,7 @@
 				/**
 				 * @method 查询歌曲评论
 				 */
-				payIntro: function() {
+				payIntro: function () {
 					this.alertModal.title = '计费说明';
 					this.alertModal.content = '计算公式：总费用=实际查询评论数÷3000×0.01。<br>如：一首歌总评论数200000，在第6000条评论中找到TA的评论，所需费用为：6000÷3000×0.01=0.02元。<br>若200000条评论中未找到TA的评论，所需费用为：200000÷3000×0.01=0.66元。<br>以此累加得到总费用。';
 				},
@@ -653,8 +890,8 @@
 							cookie,
 						},
 					})
-					// document.querySelector('#info').innerText = JSON.stringify(res.data, null, 2)
 				},
+
 				login: async function () {
 					const cookie = localStorage.getItem('cookie')
 					this.getLoginStatus(cookie)
@@ -669,7 +906,7 @@
 					this.alertModal.title = '打开网易云音乐APP扫码登录';
 					this.alertModal.content = `<div style="text-align:center;"><img src="${res2.data.data.qrimg}"/></div>`;
 					document.getElementById('btnAlert').click();
-					
+
 					this.loginTimer = setInterval(async () => {
 						const statusRes = await this.checkStatus(key)
 						if (statusRes.code === 800) {
@@ -680,10 +917,11 @@
 							// 这一步会返回cookie
 							clearInterval(this.loginTimer)
 							this.alertModal.title = '登录成功';
+							this.alertModal.content = '您已登录成功，可继续下一步操作';
 							await this.getLoginStatus(statusRes.cookie)
 							this.isLogin = true;
 							localStorage.setItem('cookie', statusRes.cookie)
-							document.getElementById('btnAlertClose').click();
+							sessionStorage.removeItem('cookie');
 						}
 					}, 3000)
 				},
@@ -691,7 +929,7 @@
 				/**
 				 * @method 监听提示对话框关闭
 				 */
-				alertClose: function() {
+				alertClose: function () {
 					if (this.alertModal.source === 'login') {
 						if (this.loginTimer) {
 							clearInterval(this.loginTimer);
@@ -703,18 +941,20 @@
 				/**
 				 * @method 退出登录
 				 */
-				logout: function(params) {
+				logout: function (params) {
 					const cookie = localStorage.getItem('cookie')
 					axios({
 						url: `/logout?cookie=${cookie}&d=${Date.now()}`
 					}).then(res => {
 						localStorage.removeItem('cookie');
+						sessionStorage.removeItem('cookie');
 						this.isLogin = false;
 						this.alertModal.title = '退出成功';
 						this.alertModal.content = '您已退出登录';
 						document.getElementById('btnAlert').click();
 					}).catch((err) => {
 						localStorage.removeItem('cookie');
+						sessionStorage.removeItem('cookie');
 						this.isLogin = false;
 						this.alertModal.title = '退出成功';
 						this.alertModal.content = '您已退出登录';
@@ -722,10 +962,43 @@
 					});
 				},
 
+				/**
+				 * @method 确定高级设置
+				 */
+				advancedOpen: function () {
+					this.advancedForm.thread = this.thread;
+					this.advancedForm.proxy = this.proxy;
+					this.advancedForm.loopAll = this.loopAll;
+				},
+
+				/**
+				 * @method 确定高级设置
+				 */
+				advancedOk: function () {
+					let thread = parseInt(this.advancedForm.thread);
+					if (isNaN(thread)) {
+						thread = this.thread;
+					}
+					if (thread < 3) {
+						thread = 3;
+					}
+					if (thread > 30) {
+						thread = 30;
+					}
+					this.thread = thread;
+					this.proxy = this.advancedForm.proxy.trim();
+					this.loopAll = this.advancedForm.loopAll;
+					localStorage.setItem('advanced', JSON.stringify({
+						thread: this.thread,
+						proxy: this.proxy,
+						loopAll: this.loopAll
+					}))
+				}
+
 			}
 		});
 
-		
+
 	</script>
 
 	<!--  popper.min.js 用于弹窗、提示、下拉菜单 -->
