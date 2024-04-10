@@ -1,5 +1,11 @@
 ### 下载地址：[https://pan.baidu.com/s/1wXD1jmYGjKZRxXRP-KVduA?pwd=1314](https://pan.baidu.com/s/1wXD1jmYGjKZRxXRP-KVduA?pwd=1314)
 
+### v2.1.1
+
+`更新时间：2024-04-10 16:00`
+
+- 修复部分bug
+
 ### v2.1.0
 
 `更新时间：2024-04-08 11:00`
