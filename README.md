@@ -1,5 +1,14 @@
 ### 下载地址：[https://pan.baidu.com/s/1wXD1jmYGjKZRxXRP-KVduA?pwd=1314](https://pan.baidu.com/s/1wXD1jmYGjKZRxXRP-KVduA?pwd=1314)
 
+### v2.2.0
+
+`更新时间：2024-04-14 17:30`
+
+- 修改订单金额bug
+- 优化代理商功能
+- 优化查询体验
+- 优化更新提示
+
 ### v2.1.1
 
 `更新时间：2024-04-10 16:00`
